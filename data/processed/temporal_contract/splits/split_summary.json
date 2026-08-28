@@ -1,0 +1,67 @@
+{
+  "actor_counts": {
+    "train": 482733,
+    "test": 270566,
+    "validation": 69643
+  },
+  "strict_actor_disjoint_temporal": {
+    "train": {
+      "rows": 543517,
+      "eligible_k3": 13445,
+      "positive_k3": 55,
+      "eligible_k5": 15339,
+      "positive_k5": 68,
+      "eligible_k1": 5363,
+      "positive_k1": 22
+    },
+    "validation": {
+      "rows": 70393,
+      "eligible_k5": 730,
+      "positive_k5": 5,
+      "eligible_k3": 542,
+      "positive_k3": 3,
+      "eligible_k1": 350,
+      "positive_k1": 2
+    },
+    "test": {
+      "rows": 282568,
+      "eligible_k3": 1975,
+      "positive_k3": 10,
+      "eligible_k5": 1772,
+      "positive_k5": 7,
+      "eligible_k1": 984,
+      "positive_k1": 17
+    }
+  },
+  "temporal_continuation": {
+    "train": {
+      "rows": 543517,
+      "eligible_k3": 13445,
+      "positive_k3": 55,
+      "eligible_k5": 15339,
+      "positive_k5": 68,
+      "eligible_k1": 5363,
+      "positive_k1": 22
+    },
+    "validation": {
+      "rows": 80409,
+      "eligible_k5": 1176,
+      "positive_k5": 9,
+      "eligible_k3": 880,
+      "positive_k3": 7,
+      "eligible_k1": 538,
+      "positive_k1": 4
+    },
+    "test": {
+      "rows": 296765,
+      "eligible_k3": 2955,
+      "positive_k3": 11,
+      "eligible_k5": 2675,
+      "positive_k5": 8,
+      "eligible_k1": 1610,
+      "positive_k1": 19
+    }
+  },
+  "strict_definition": "actor first-observed timestep determines membership; rows also must fall in the matching time range",
+  "continuation_definition": "all actors retained; rows assigned only by timestep"
+}

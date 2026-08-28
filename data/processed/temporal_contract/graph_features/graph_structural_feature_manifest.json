@@ -1,0 +1,15 @@
+{
+  "features": [
+    "in_degree_t",
+    "out_degree_t",
+    "unique_counterparties_t",
+    "unique_counterparties_last3",
+    "unique_counterparties_last5",
+    "new_counterparties_t",
+    "cumulative_unique_counterparties"
+  ],
+  "rows_written": 920691,
+  "construction": "AddrTx and TxAddr joined to transaction timestep; counterparties are input/output addresses in the same transaction",
+  "causality_rule": "only transactions at or before the observation timestep contribute",
+  "excluded": "AddrAddr_edgelist.csv because it lacks transaction/timestep identity"
+}

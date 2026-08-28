@@ -1,0 +1,836 @@
+{
+  "horizons": {
+    "1": {
+      "by_split": {
+        "train": {
+          "rows": 5363,
+          "positives": 22,
+          "positive_rate": 0.004102181614767854,
+          "by_timestep": {
+            "1": {
+              "rows": 206,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "2": {
+              "rows": 121,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "3": {
+              "rows": 125,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "4": {
+              "rows": 167,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "5": {
+              "rows": 75,
+              "positives": 1,
+              "rate": 0.013333333333333334
+            },
+            "6": {
+              "rows": 58,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "7": {
+              "rows": 199,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "8": {
+              "rows": 223,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "9": {
+              "rows": 127,
+              "positives": 1,
+              "rate": 0.007874015748031496
+            },
+            "10": {
+              "rows": 307,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "11": {
+              "rows": 169,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "12": {
+              "rows": 742,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "13": {
+              "rows": 64,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "14": {
+              "rows": 62,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "15": {
+              "rows": 77,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "16": {
+              "rows": 67,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "17": {
+              "rows": 202,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "18": {
+              "rows": 82,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "19": {
+              "rows": 100,
+              "positives": 1,
+              "rate": 0.01
+            },
+            "20": {
+              "rows": 1452,
+              "positives": 4,
+              "rate": 0.0027548209366391185
+            },
+            "21": {
+              "rows": 101,
+              "positives": 2,
+              "rate": 0.019801980198019802
+            },
+            "22": {
+              "rows": 193,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "23": {
+              "rows": 86,
+              "positives": 7,
+              "rate": 0.08139534883720931
+            },
+            "24": {
+              "rows": 86,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "25": {
+              "rows": 37,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "26": {
+              "rows": 38,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "27": {
+              "rows": 20,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "28": {
+              "rows": 38,
+              "positives": 2,
+              "rate": 0.05263157894736842
+            },
+            "29": {
+              "rows": 70,
+              "positives": 2,
+              "rate": 0.02857142857142857
+            },
+            "30": {
+              "rows": 69,
+              "positives": 2,
+              "rate": 0.028985507246376812
+            }
+          }
+        },
+        "validation": {
+          "rows": 538,
+          "positives": 4,
+          "positive_rate": 0.007434944237918215,
+          "by_timestep": {
+            "31": {
+              "rows": 118,
+              "positives": 4,
+              "rate": 0.03389830508474576
+            },
+            "32": {
+              "rows": 109,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "33": {
+              "rows": 49,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "34": {
+              "rows": 47,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "35": {
+              "rows": 215,
+              "positives": 0,
+              "rate": 0.0
+            }
+          }
+        },
+        "test": {
+          "rows": 1610,
+          "positives": 19,
+          "positive_rate": 0.011801242236024845,
+          "by_timestep": {
+            "36": {
+              "rows": 115,
+              "positives": 1,
+              "rate": 0.008695652173913044
+            },
+            "37": {
+              "rows": 78,
+              "positives": 1,
+              "rate": 0.01282051282051282
+            },
+            "38": {
+              "rows": 53,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "39": {
+              "rows": 94,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "40": {
+              "rows": 105,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "41": {
+              "rows": 118,
+              "positives": 2,
+              "rate": 0.01694915254237288
+            },
+            "42": {
+              "rows": 138,
+              "positives": 1,
+              "rate": 0.007246376811594203
+            },
+            "43": {
+              "rows": 243,
+              "positives": 1,
+              "rate": 0.00411522633744856
+            },
+            "44": {
+              "rows": 202,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "45": {
+              "rows": 95,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "46": {
+              "rows": 175,
+              "positives": 2,
+              "rate": 0.011428571428571429
+            },
+            "47": {
+              "rows": 140,
+              "positives": 1,
+              "rate": 0.007142857142857143
+            },
+            "48": {
+              "rows": 54,
+              "positives": 10,
+              "rate": 0.18518518518518517
+            }
+          }
+        }
+      },
+      "test_latest_three_timestep_positive_fraction": 0.6842105263157895,
+      "full_horizon_last_valid_timestep": 48
+    },
+    "3": {
+      "by_split": {
+        "train": {
+          "rows": 13445,
+          "positives": 55,
+          "positive_rate": 0.004090740052063964,
+          "by_timestep": {
+            "1": {
+              "rows": 461,
+              "positives": 1,
+              "rate": 0.0021691973969631237
+            },
+            "2": {
+              "rows": 217,
+              "positives": 1,
+              "rate": 0.004608294930875576
+            },
+            "3": {
+              "rows": 237,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "4": {
+              "rows": 214,
+              "positives": 2,
+              "rate": 0.009345794392523364
+            },
+            "5": {
+              "rows": 275,
+              "positives": 1,
+              "rate": 0.0036363636363636364
+            },
+            "6": {
+              "rows": 111,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "7": {
+              "rows": 964,
+              "positives": 3,
+              "rate": 0.0031120331950207467
+            },
+            "8": {
+              "rows": 1051,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "9": {
+              "rows": 1059,
+              "positives": 1,
+              "rate": 0.0009442870632672333
+            },
+            "10": {
+              "rows": 488,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "11": {
+              "rows": 431,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "12": {
+              "rows": 792,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "13": {
+              "rows": 170,
+              "positives": 1,
+              "rate": 0.0058823529411764705
+            },
+            "14": {
+              "rows": 102,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "15": {
+              "rows": 145,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "16": {
+              "rows": 113,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "17": {
+              "rows": 352,
+              "positives": 1,
+              "rate": 0.002840909090909091
+            },
+            "18": {
+              "rows": 116,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "19": {
+              "rows": 277,
+              "positives": 1,
+              "rate": 0.0036101083032490976
+            },
+            "20": {
+              "rows": 1525,
+              "positives": 2,
+              "rate": 0.0013114754098360656
+            },
+            "21": {
+              "rows": 202,
+              "positives": 4,
+              "rate": 0.019801980198019802
+            },
+            "22": {
+              "rows": 3286,
+              "positives": 6,
+              "rate": 0.0018259281801582471
+            },
+            "23": {
+              "rows": 221,
+              "positives": 8,
+              "rate": 0.03619909502262444
+            },
+            "24": {
+              "rows": 141,
+              "positives": 5,
+              "rate": 0.03546099290780142
+            },
+            "25": {
+              "rows": 64,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "26": {
+              "rows": 70,
+              "positives": 3,
+              "rate": 0.04285714285714286
+            },
+            "27": {
+              "rows": 53,
+              "positives": 1,
+              "rate": 0.018867924528301886
+            },
+            "28": {
+              "rows": 57,
+              "positives": 2,
+              "rate": 0.03508771929824561
+            },
+            "29": {
+              "rows": 165,
+              "positives": 10,
+              "rate": 0.06060606060606061
+            },
+            "30": {
+              "rows": 86,
+              "positives": 2,
+              "rate": 0.023255813953488372
+            }
+          }
+        },
+        "validation": {
+          "rows": 880,
+          "positives": 7,
+          "positive_rate": 0.007954545454545454,
+          "by_timestep": {
+            "31": {
+              "rows": 188,
+              "positives": 4,
+              "rate": 0.02127659574468085
+            },
+            "32": {
+              "rows": 170,
+              "positives": 2,
+              "rate": 0.011764705882352941
+            },
+            "33": {
+              "rows": 150,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "34": {
+              "rows": 87,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "35": {
+              "rows": 285,
+              "positives": 1,
+              "rate": 0.0035087719298245615
+            }
+          }
+        },
+        "test": {
+          "rows": 2955,
+          "positives": 11,
+          "positive_rate": 0.003722504230118443,
+          "by_timestep": {
+            "36": {
+              "rows": 195,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "37": {
+              "rows": 133,
+              "positives": 1,
+              "rate": 0.007518796992481203
+            },
+            "38": {
+              "rows": 126,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "39": {
+              "rows": 141,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "40": {
+              "rows": 220,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "41": {
+              "rows": 194,
+              "positives": 3,
+              "rate": 0.015463917525773196
+            },
+            "42": {
+              "rows": 327,
+              "positives": 1,
+              "rate": 0.0030581039755351682
+            },
+            "43": {
+              "rows": 438,
+              "positives": 1,
+              "rate": 0.00228310502283105
+            },
+            "44": {
+              "rows": 409,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "45": {
+              "rows": 486,
+              "positives": 2,
+              "rate": 0.00411522633744856
+            },
+            "46": {
+              "rows": 286,
+              "positives": 3,
+              "rate": 0.01048951048951049
+            }
+          }
+        }
+      },
+      "test_latest_three_timestep_positive_fraction": 0.45454545454545453,
+      "full_horizon_last_valid_timestep": 46
+    },
+    "5": {
+      "by_split": {
+        "train": {
+          "rows": 15339,
+          "positives": 68,
+          "positive_rate": 0.004433144272768759,
+          "by_timestep": {
+            "1": {
+              "rows": 593,
+              "positives": 1,
+              "rate": 0.0016863406408094434
+            },
+            "2": {
+              "rows": 259,
+              "positives": 1,
+              "rate": 0.003861003861003861
+            },
+            "3": {
+              "rows": 339,
+              "positives": 1,
+              "rate": 0.0029498525073746312
+            },
+            "4": {
+              "rows": 394,
+              "positives": 1,
+              "rate": 0.0025380710659898475
+            },
+            "5": {
+              "rows": 459,
+              "positives": 1,
+              "rate": 0.002178649237472767
+            },
+            "6": {
+              "rows": 139,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "7": {
+              "rows": 995,
+              "positives": 3,
+              "rate": 0.003015075376884422
+            },
+            "8": {
+              "rows": 1130,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "9": {
+              "rows": 1077,
+              "positives": 1,
+              "rate": 0.0009285051067780873
+            },
+            "10": {
+              "rows": 601,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "11": {
+              "rows": 854,
+              "positives": 1,
+              "rate": 0.00117096018735363
+            },
+            "12": {
+              "rows": 395,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "13": {
+              "rows": 215,
+              "positives": 1,
+              "rate": 0.004651162790697674
+            },
+            "14": {
+              "rows": 112,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "15": {
+              "rows": 418,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "16": {
+              "rows": 137,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "17": {
+              "rows": 450,
+              "positives": 1,
+              "rate": 0.0022222222222222222
+            },
+            "18": {
+              "rows": 160,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "19": {
+              "rows": 340,
+              "positives": 2,
+              "rate": 0.0058823529411764705
+            },
+            "20": {
+              "rows": 1567,
+              "positives": 4,
+              "rate": 0.0025526483726866626
+            },
+            "21": {
+              "rows": 259,
+              "positives": 4,
+              "rate": 0.015444015444015444
+            },
+            "22": {
+              "rows": 3304,
+              "positives": 6,
+              "rate": 0.0018159806295399517
+            },
+            "23": {
+              "rows": 235,
+              "positives": 8,
+              "rate": 0.03404255319148936
+            },
+            "24": {
+              "rows": 166,
+              "positives": 7,
+              "rate": 0.04216867469879518
+            },
+            "25": {
+              "rows": 107,
+              "positives": 3,
+              "rate": 0.028037383177570093
+            },
+            "26": {
+              "rows": 94,
+              "positives": 3,
+              "rate": 0.031914893617021274
+            },
+            "27": {
+              "rows": 139,
+              "positives": 3,
+              "rate": 0.02158273381294964
+            },
+            "28": {
+              "rows": 74,
+              "positives": 3,
+              "rate": 0.04054054054054054
+            },
+            "29": {
+              "rows": 215,
+              "positives": 11,
+              "rate": 0.05116279069767442
+            },
+            "30": {
+              "rows": 112,
+              "positives": 2,
+              "rate": 0.017857142857142856
+            }
+          }
+        },
+        "validation": {
+          "rows": 1176,
+          "positives": 9,
+          "positive_rate": 0.007653061224489796,
+          "by_timestep": {
+            "31": {
+              "rows": 320,
+              "positives": 4,
+              "rate": 0.0125
+            },
+            "32": {
+              "rows": 251,
+              "positives": 2,
+              "rate": 0.00796812749003984
+            },
+            "33": {
+              "rows": 172,
+              "positives": 1,
+              "rate": 0.005813953488372093
+            },
+            "34": {
+              "rows": 101,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "35": {
+              "rows": 332,
+              "positives": 2,
+              "rate": 0.006024096385542169
+            }
+          }
+        },
+        "test": {
+          "rows": 2675,
+          "positives": 8,
+          "positive_rate": 0.0029906542056074765,
+          "by_timestep": {
+            "36": {
+              "rows": 295,
+              "positives": 1,
+              "rate": 0.003389830508474576
+            },
+            "37": {
+              "rows": 152,
+              "positives": 1,
+              "rate": 0.006578947368421052
+            },
+            "38": {
+              "rows": 153,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "39": {
+              "rows": 171,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "40": {
+              "rows": 307,
+              "positives": 0,
+              "rate": 0.0
+            },
+            "41": {
+              "rows": 242,
+              "positives": 3,
+              "rate": 0.012396694214876033
+            },
+            "42": {
+              "rows": 300,
+              "positives": 1,
+              "rate": 0.0033333333333333335
+            },
+            "43": {
+              "rows": 561,
+              "positives": 2,
+              "rate": 0.0035650623885918
+            },
+            "44": {
+              "rows": 494,
+              "positives": 0,
+              "rate": 0.0
+            }
+          }
+        }
+      },
+      "test_latest_three_timestep_positive_fraction": 0.375,
+      "full_horizon_last_valid_timestep": 44
+    }
+  },
+  "feature_drift": {
+    "tx_count_t": {
+      "train_mean": 1.4114259535580305,
+      "test_mean": 1.3286674641551397,
+      "test_to_train_mean_ratio": 0.9413653339771266
+    },
+    "tx_count_last3": {
+      "train_mean": 1.524949541596675,
+      "test_mean": 1.4119892844506596,
+      "test_to_train_mean_ratio": 0.9259252492854668
+    },
+    "tx_count_last5": {
+      "train_mean": 1.621119486602995,
+      "test_mean": 1.4762488837969436,
+      "test_to_train_mean_ratio": 0.9106354565451414
+    },
+    "cumulative_tx_count": {
+      "train_mean": 2.0463260578785945,
+      "test_mean": 1.9719879365828181,
+      "test_to_train_mean_ratio": 0.9636723966791285
+    },
+    "unique_counterparties_t": {
+      "train_mean": 5.416411998152772,
+      "test_mean": 6.714107121796708,
+      "test_to_train_mean_ratio": 1.2395857486628612
+    },
+    "unique_counterparties_last3": {
+      "train_mean": 5.728968919095447,
+      "test_mean": 7.150250197968089,
+      "test_to_train_mean_ratio": 1.2480867498050678
+    },
+    "unique_counterparties_last5": {
+      "train_mean": 5.975395433813477,
+      "test_mean": 7.586905463919263,
+      "test_to_train_mean_ratio": 1.269690943127646
+    },
+    "new_counterparties_t": {
+      "train_mean": 5.350680843469478,
+      "test_mean": 6.692042525230401,
+      "test_to_train_mean_ratio": 1.25068990676169
+    },
+    "cumulative_unique_counterparties": {
+      "train_mean": 7.09231541975688,
+      "test_mean": 9.321621485013395,
+      "test_to_train_mean_ratio": 1.314326976920174
+    }
+  },
+  "graph_signal_interpretation": {
+    "horizon_1": "strongest observed graph-enhanced ranking signal in the prior baseline",
+    "horizon_3": "weak graph-enhanced ranking signal",
+    "horizon_5": "no useful graph-enhanced ranking signal in the prior baseline"
+  },
+  "recommendation": {
+    "temporal_gnn": "defer as a research experiment, not a headline model",
+    "primary_horizon": 1,
+    "secondary_horizons": [
+      3,
+      5
+    ],
+    "reason": "Only 19, 11, and 8 temporal-continuation test positives remain at horizons 1, 3, and 5; longer-horizon evaluation is statistically fragile and graph signal decays."
+  }
+}

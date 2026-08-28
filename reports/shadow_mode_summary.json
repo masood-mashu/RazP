@@ -1,0 +1,409 @@
+{
+  "mode": "shadow_no_action",
+  "model_version": "xgb-graph-v1",
+  "threshold": 0.571304976940155,
+  "rows_scored": 7511,
+  "timesteps": 48,
+  "score_summary": {
+    "mean": 0.1710606962442398,
+    "p95": 0.6113790273666382,
+    "max": 0.992778480052948
+  },
+  "band_counts": {
+    "monitor": 5507,
+    "high": 1872,
+    "critical": 132
+  },
+  "timestep_summary": [
+    {
+      "time_step": 1,
+      "rows": 206,
+      "mean_score": 0.164035826921463,
+      "p95_score": 0.6113790273666382,
+      "high_or_critical": 52,
+      "critical": 1
+    },
+    {
+      "time_step": 2,
+      "rows": 121,
+      "mean_score": 0.14683833718299866,
+      "p95_score": 0.6113790273666382,
+      "high_or_critical": 24,
+      "critical": 5
+    },
+    {
+      "time_step": 3,
+      "rows": 125,
+      "mean_score": 0.12540477514266968,
+      "p95_score": 0.6113790273666382,
+      "high_or_critical": 23,
+      "critical": 1
+    },
+    {
+      "time_step": 4,
+      "rows": 167,
+      "mean_score": 0.11271637678146362,
+      "p95_score": 0.571304976940155,
+      "high_or_critical": 27,
+      "critical": 0
+    },
+    {
+      "time_step": 5,
+      "rows": 75,
+      "mean_score": 0.19875730574131012,
+      "p95_score": 0.6113790273666382,
+      "high_or_critical": 23,
+      "critical": 2
+    },
+    {
+      "time_step": 6,
+      "rows": 58,
+      "mean_score": 0.12266024202108383,
+      "p95_score": 0.6113790273666382,
+      "high_or_critical": 11,
+      "critical": 1
+    },
+    {
+      "time_step": 7,
+      "rows": 199,
+      "mean_score": 0.28158560395240784,
+      "p95_score": 0.6113790273666382,
+      "high_or_critical": 93,
+      "critical": 1
+    },
+    {
+      "time_step": 8,
+      "rows": 223,
+      "mean_score": 0.12217708677053452,
+      "p95_score": 0.6113790273666382,
+      "high_or_critical": 37,
+      "critical": 9
+    },
+    {
+      "time_step": 9,
+      "rows": 127,
+      "mean_score": 0.09048903733491898,
+      "p95_score": 0.571304976940155,
+      "high_or_critical": 16,
+      "critical": 2
+    },
+    {
+      "time_step": 10,
+      "rows": 307,
+      "mean_score": 0.23057760298252106,
+      "p95_score": 0.852349579334259,
+      "high_or_critical": 94,
+      "critical": 41
+    },
+    {
+      "time_step": 11,
+      "rows": 169,
+      "mean_score": 0.28933024406433105,
+      "p95_score": 0.571304976940155,
+      "high_or_critical": 80,
+      "critical": 1
+    },
+    {
+      "time_step": 12,
+      "rows": 742,
+      "mean_score": 0.2849465608596802,
+      "p95_score": 0.571304976940155,
+      "high_or_critical": 362,
+      "critical": 4
+    },
+    {
+      "time_step": 13,
+      "rows": 64,
+      "mean_score": 0.10009291023015976,
+      "p95_score": 0.571304976940155,
+      "high_or_critical": 9,
+      "critical": 0
+    },
+    {
+      "time_step": 14,
+      "rows": 62,
+      "mean_score": 0.11615968495607376,
+      "p95_score": 0.571304976940155,
+      "high_or_critical": 12,
+      "critical": 0
+    },
+    {
+      "time_step": 15,
+      "rows": 77,
+      "mean_score": 0.08883091062307358,
+      "p95_score": 0.571304976940155,
+      "high_or_critical": 10,
+      "critical": 0
+    },
+    {
+      "time_step": 16,
+      "rows": 67,
+      "mean_score": 0.10796603560447693,
+      "p95_score": 0.571304976940155,
+      "high_or_critical": 12,
+      "critical": 0
+    },
+    {
+      "time_step": 17,
+      "rows": 202,
+      "mean_score": 0.26103630661964417,
+      "p95_score": 0.571304976940155,
+      "high_or_critical": 87,
+      "critical": 4
+    },
+    {
+      "time_step": 18,
+      "rows": 82,
+      "mean_score": 0.04389868304133415,
+      "p95_score": 0.5270352393388755,
+      "high_or_critical": 4,
+      "critical": 0
+    },
+    {
+      "time_step": 19,
+      "rows": 100,
+      "mean_score": 0.16219623386859894,
+      "p95_score": 0.6113790273666382,
+      "high_or_critical": 25,
+      "critical": 2
+    },
+    {
+      "time_step": 20,
+      "rows": 1452,
+      "mean_score": 0.16774633526802063,
+      "p95_score": 0.571304976940155,
+      "high_or_critical": 388,
+      "critical": 9
+    },
+    {
+      "time_step": 21,
+      "rows": 101,
+      "mean_score": 0.11463883519172668,
+      "p95_score": 0.6113790273666382,
+      "high_or_critical": 16,
+      "critical": 3
+    },
+    {
+      "time_step": 22,
+      "rows": 193,
+      "mean_score": 0.1420239508152008,
+      "p95_score": 0.571304976940155,
+      "high_or_critical": 44,
+      "critical": 0
+    },
+    {
+      "time_step": 23,
+      "rows": 86,
+      "mean_score": 0.13549445569515228,
+      "p95_score": 0.7921069413423538,
+      "high_or_critical": 16,
+      "critical": 5
+    },
+    {
+      "time_step": 24,
+      "rows": 86,
+      "mean_score": 0.13001365959644318,
+      "p95_score": 0.6113790273666382,
+      "high_or_critical": 17,
+      "critical": 2
+    },
+    {
+      "time_step": 25,
+      "rows": 37,
+      "mean_score": 0.05184391513466835,
+      "p95_score": 0.249235746264456,
+      "high_or_critical": 2,
+      "critical": 0
+    },
+    {
+      "time_step": 26,
+      "rows": 38,
+      "mean_score": 0.03496478125452995,
+      "p95_score": 0.16641854941844872,
+      "high_or_critical": 2,
+      "critical": 0
+    },
+    {
+      "time_step": 27,
+      "rows": 20,
+      "mean_score": 0.0004419314209371805,
+      "p95_score": 0.0027813788037747153,
+      "high_or_critical": 0,
+      "critical": 0
+    },
+    {
+      "time_step": 28,
+      "rows": 38,
+      "mean_score": 0.17416512966156006,
+      "p95_score": 0.647524610161781,
+      "high_or_critical": 10,
+      "critical": 2
+    },
+    {
+      "time_step": 29,
+      "rows": 70,
+      "mean_score": 0.17888899147510529,
+      "p95_score": 0.743912830948829,
+      "high_or_critical": 18,
+      "critical": 4
+    },
+    {
+      "time_step": 30,
+      "rows": 69,
+      "mean_score": 0.21222133934497833,
+      "p95_score": 0.852349579334259,
+      "high_or_critical": 20,
+      "critical": 5
+    },
+    {
+      "time_step": 31,
+      "rows": 118,
+      "mean_score": 0.31545236706733704,
+      "p95_score": 0.571304976940155,
+      "high_or_critical": 62,
+      "critical": 3
+    },
+    {
+      "time_step": 32,
+      "rows": 109,
+      "mean_score": 0.21016131341457367,
+      "p95_score": 0.6113790273666382,
+      "high_or_critical": 36,
+      "critical": 0
+    },
+    {
+      "time_step": 33,
+      "rows": 49,
+      "mean_score": 0.06393057852983475,
+      "p95_score": 0.571304976940155,
+      "high_or_critical": 4,
+      "critical": 0
+    },
+    {
+      "time_step": 34,
+      "rows": 47,
+      "mean_score": 0.14112789928913116,
+      "p95_score": 0.571304976940155,
+      "high_or_critical": 9,
+      "critical": 0
+    },
+    {
+      "time_step": 35,
+      "rows": 215,
+      "mean_score": 0.17501093447208405,
+      "p95_score": 0.6113790273666382,
+      "high_or_critical": 56,
+      "critical": 3
+    },
+    {
+      "time_step": 36,
+      "rows": 115,
+      "mean_score": 0.18790291249752045,
+      "p95_score": 0.6113790273666382,
+      "high_or_critical": 34,
+      "critical": 0
+    },
+    {
+      "time_step": 37,
+      "rows": 78,
+      "mean_score": 0.17159885168075562,
+      "p95_score": 0.6113790273666382,
+      "high_or_critical": 22,
+      "critical": 0
+    },
+    {
+      "time_step": 38,
+      "rows": 53,
+      "mean_score": 0.11203985661268234,
+      "p95_score": 0.571304976940155,
+      "high_or_critical": 9,
+      "critical": 0
+    },
+    {
+      "time_step": 39,
+      "rows": 94,
+      "mean_score": 0.13589678704738617,
+      "p95_score": 0.571304976940155,
+      "high_or_critical": 21,
+      "critical": 1
+    },
+    {
+      "time_step": 40,
+      "rows": 105,
+      "mean_score": 0.11234404146671295,
+      "p95_score": 0.571304976940155,
+      "high_or_critical": 19,
+      "critical": 0
+    },
+    {
+      "time_step": 41,
+      "rows": 118,
+      "mean_score": 0.10627924650907516,
+      "p95_score": 0.571304976940155,
+      "high_or_critical": 18,
+      "critical": 1
+    },
+    {
+      "time_step": 42,
+      "rows": 138,
+      "mean_score": 0.10884103178977966,
+      "p95_score": 0.571304976940155,
+      "high_or_critical": 24,
+      "critical": 0
+    },
+    {
+      "time_step": 43,
+      "rows": 243,
+      "mean_score": 0.08100765198469162,
+      "p95_score": 0.6113790273666382,
+      "high_or_critical": 25,
+      "critical": 1
+    },
+    {
+      "time_step": 44,
+      "rows": 202,
+      "mean_score": 0.12481245398521423,
+      "p95_score": 0.852349579334259,
+      "high_or_critical": 35,
+      "critical": 12
+    },
+    {
+      "time_step": 45,
+      "rows": 95,
+      "mean_score": 0.09232665598392487,
+      "p95_score": 0.571304976940155,
+      "high_or_critical": 13,
+      "critical": 2
+    },
+    {
+      "time_step": 46,
+      "rows": 175,
+      "mean_score": 0.1598655879497528,
+      "p95_score": 0.571304976940155,
+      "high_or_critical": 41,
+      "critical": 4
+    },
+    {
+      "time_step": 47,
+      "rows": 140,
+      "mean_score": 0.14444436132907867,
+      "p95_score": 0.571304976940155,
+      "high_or_critical": 33,
+      "critical": 1
+    },
+    {
+      "time_step": 48,
+      "rows": 54,
+      "mean_score": 0.10659810155630112,
+      "p95_score": 0.6113790273666382,
+      "high_or_critical": 9,
+      "critical": 0
+    }
+  ],
+  "safety": {
+    "actions_triggered": 0,
+    "automatic_blocks": 0,
+    "customer_impact": false
+  },
+  "interpretation": "Distribution and drift telemetry only; this stream is not a representative Razorpay validation set and must not be used as deployment evidence."
+}

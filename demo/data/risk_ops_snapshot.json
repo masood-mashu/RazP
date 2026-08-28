@@ -1,0 +1,945 @@
+{
+  "schema_version": "risk-ops-predictions.v1",
+  "generated_at": "2026-08-28",
+  "mode": "recorded",
+  "model": {
+    "name": "Graph-enhanced XGBoost",
+    "version": "xgb-graph-v1",
+    "horizon": 1,
+    "primary": true
+  },
+  "threshold": 0.571304976940155,
+  "source": {
+    "split_file": "data\\processed\\temporal_contract\\splits\\temporal_continuation_rows.csv",
+    "test_rows": 1610,
+    "returned_alerts": 50
+  },
+  "measured": {
+    "rolling_mean_ap": 0.067730699,
+    "rolling_std_ap": 0.0793144952,
+    "gnn_ablation_ap": 0.065,
+    "horizons": [
+      {
+        "k": 1,
+        "ap": 0.067730699
+      },
+      {
+        "k": 3,
+        "ap": 0.0303233806
+      },
+      {
+        "k": 5,
+        "ap": 0.0235581979
+      }
+    ],
+    "references": {
+      "causal_xgb_k1_ap": 0.0202167,
+      "rules_k1_ap": 0.0071421
+    }
+  },
+  "policy": {
+    "automatic_blocks": 0
+  },
+  "alerts": [
+    {
+      "id": "ACT-0001",
+      "address": "3MczGKEmuyCr8MjbAJcQrzvhSWQfwE6aXr",
+      "time_step": 46,
+      "time": "timestep 46",
+      "score": 0.925318,
+      "band": "critical",
+      "action": "Human review",
+      "title": "High-risk actor signal",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 9",
+        "new links 9"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0002",
+      "address": "3M8oRqWfppUDCaPEbmLK4NoQP4iuzh98Y7",
+      "time_step": 44,
+      "time": "timestep 44",
+      "score": 0.925318,
+      "band": "critical",
+      "action": "Human review",
+      "title": "High-risk actor signal",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 9",
+        "new links 9"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0003",
+      "address": "15Kg2a1mapen6vAzCZbDfSzHWyoeVWyFFi",
+      "time_step": 41,
+      "time": "timestep 41",
+      "score": 0.925318,
+      "band": "critical",
+      "action": "Human review",
+      "title": "High-risk actor signal",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 9",
+        "new links 9"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0004",
+      "address": "3Nv3b71ZCnhMo8L12ZQUGemDxXTSk4a6wK",
+      "time_step": 47,
+      "time": "timestep 47",
+      "score": 0.925318,
+      "band": "critical",
+      "action": "Human review",
+      "title": "High-risk actor signal",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 9",
+        "new links 9"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0005",
+      "address": "3Djnpzyk8vgVYNaiLHgipRsVrDo9UYFc5M",
+      "time_step": 44,
+      "time": "timestep 44",
+      "score": 0.897053,
+      "band": "critical",
+      "action": "Human review",
+      "title": "High-risk actor signal",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 1",
+        "new links 1"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0006",
+      "address": "13sNgUUQ3BNrUbFdH6vC7rmzCxSST4C6vB",
+      "time_step": 44,
+      "time": "timestep 44",
+      "score": 0.897053,
+      "band": "critical",
+      "action": "Human review",
+      "title": "High-risk actor signal",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 1",
+        "new links 1"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0007",
+      "address": "16nAMsreNcYH2Zq4WkVaEuY2zheBMh2m41",
+      "time_step": 46,
+      "time": "timestep 46",
+      "score": 0.888933,
+      "band": "critical",
+      "action": "Human review",
+      "title": "High-risk actor signal",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 1",
+        "new links 1"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0008",
+      "address": "17m3Q6mBC5fjS1JMZCJ5HuStRdL35uDdm1",
+      "time_step": 44,
+      "time": "timestep 44",
+      "score": 0.85235,
+      "band": "critical",
+      "action": "Human review",
+      "title": "High-risk actor signal",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 3",
+        "new links 3"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0009",
+      "address": "1GPy12gXTf3ubqn5vGoAkchWdcr37Lfxaq",
+      "time_step": 44,
+      "time": "timestep 44",
+      "score": 0.85235,
+      "band": "critical",
+      "action": "Human review",
+      "title": "High-risk actor signal",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 3",
+        "new links 3"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0010",
+      "address": "1Q5Mf1gy2e1yQnkeWZbum8LdMTci5JWqbo",
+      "time_step": 44,
+      "time": "timestep 44",
+      "score": 0.85235,
+      "band": "critical",
+      "action": "Human review",
+      "title": "High-risk actor signal",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 3",
+        "new links 3"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0011",
+      "address": "1ETKxyrzYZYtDcHAzhzzfwqiiw9kMrtdyB",
+      "time_step": 44,
+      "time": "timestep 44",
+      "score": 0.85235,
+      "band": "critical",
+      "action": "Human review",
+      "title": "High-risk actor signal",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 3",
+        "new links 3"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0012",
+      "address": "1ADY88KVnwxwNobkkz7GGkQZuQZFBoPmwg",
+      "time_step": 46,
+      "time": "timestep 46",
+      "score": 0.85235,
+      "band": "critical",
+      "action": "Human review",
+      "title": "High-risk actor signal",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 3",
+        "new links 3"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0013",
+      "address": "3H5JQ7oZmUmu53E6o53bNx7pjL69GqJYYc",
+      "time_step": 45,
+      "time": "timestep 45",
+      "score": 0.85235,
+      "band": "critical",
+      "action": "Human review",
+      "title": "High-risk actor signal",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 3",
+        "new links 3"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0014",
+      "address": "1HzienH4PiaCqb1rEgu1kXNVmgHcERGyZL",
+      "time_step": 44,
+      "time": "timestep 44",
+      "score": 0.85235,
+      "band": "critical",
+      "action": "Human review",
+      "title": "High-risk actor signal",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 3",
+        "new links 3"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0015",
+      "address": "1FbCd2M96ieS16F3agmHxEaGtxwwbdoGgu",
+      "time_step": 44,
+      "time": "timestep 44",
+      "score": 0.85235,
+      "band": "critical",
+      "action": "Human review",
+      "title": "High-risk actor signal",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 3",
+        "new links 3"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0016",
+      "address": "39zZwF6zbCNeJXtaMMAZPSsdGwd1ASizG9",
+      "time_step": 43,
+      "time": "timestep 43",
+      "score": 0.85235,
+      "band": "critical",
+      "action": "Human review",
+      "title": "High-risk actor signal",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 3",
+        "new links 3"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0017",
+      "address": "163YaqpYJm71DWfQbFVdJ8JNNYUYCLDHG6",
+      "time_step": 46,
+      "time": "timestep 46",
+      "score": 0.85235,
+      "band": "critical",
+      "action": "Human review",
+      "title": "High-risk actor signal",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 3",
+        "new links 3"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0018",
+      "address": "3ER8EGc2bDijtyWTmwXvD48ppjtHfCauoX",
+      "time_step": 39,
+      "time": "timestep 39",
+      "score": 0.85235,
+      "band": "critical",
+      "action": "Human review",
+      "title": "High-risk actor signal",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 3",
+        "new links 3"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0019",
+      "address": "14wqfM5CRbKuDwxEgrduMFNmf4S9szGcVE",
+      "time_step": 44,
+      "time": "timestep 44",
+      "score": 0.85235,
+      "band": "critical",
+      "action": "Human review",
+      "title": "High-risk actor signal",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 3",
+        "new links 3"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0020",
+      "address": "16ZqqREfrim1w1uSEdywwWJ4GVyppjyjau",
+      "time_step": 44,
+      "time": "timestep 44",
+      "score": 0.85235,
+      "band": "critical",
+      "action": "Human review",
+      "title": "High-risk actor signal",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 3",
+        "new links 3"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0021",
+      "address": "18zSjs6ZjrG1R26UZNWdZRgHBxqUsUtkex",
+      "time_step": 45,
+      "time": "timestep 45",
+      "score": 0.85235,
+      "band": "critical",
+      "action": "Human review",
+      "title": "High-risk actor signal",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 3",
+        "new links 3"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0022",
+      "address": "1GdkUQDrBdCHo6g3TFtcyuNUCucMB3pyWn",
+      "time_step": 44,
+      "time": "timestep 44",
+      "score": 0.85235,
+      "band": "critical",
+      "action": "Human review",
+      "title": "High-risk actor signal",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 3",
+        "new links 3"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0023",
+      "address": "12Dhi8eSFQKbPSKCp3zpRMqjWFLeHaMqGz",
+      "time_step": 41,
+      "time": "timestep 41",
+      "score": 0.736385,
+      "band": "high",
+      "action": "Human review",
+      "title": "Emerging activity pattern",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 2",
+        "new links 1"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0024",
+      "address": "33LnzsGyJimHuVuSFrMEDFEbx8ZuPu8uHC",
+      "time_step": 44,
+      "time": "timestep 44",
+      "score": 0.735126,
+      "band": "high",
+      "action": "Human review",
+      "title": "Emerging activity pattern",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 1",
+        "new links 1"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0025",
+      "address": "33LnzsGyJimHuVuSFrMEDFEbx8ZuPu8uHC",
+      "time_step": 45,
+      "time": "timestep 45",
+      "score": 0.615511,
+      "band": "high",
+      "action": "Human review",
+      "title": "Emerging activity pattern",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 1",
+        "new links 0"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0026",
+      "address": "36F44m3hSDGj4s9cZX3WzChfgNX5NDKFsb",
+      "time_step": 48,
+      "time": "timestep 48",
+      "score": 0.611379,
+      "band": "high",
+      "action": "Human review",
+      "title": "Emerging activity pattern",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 2",
+        "new links 2"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0027",
+      "address": "19Dg5EMa56EB3GeojB886UmKNCuxWqAZ7U",
+      "time_step": 36,
+      "time": "timestep 36",
+      "score": 0.611379,
+      "band": "high",
+      "action": "Human review",
+      "title": "Emerging activity pattern",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 2",
+        "new links 2"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0028",
+      "address": "14qHbE4F9EokNemAHLAQz63pcYkEWUBWkq",
+      "time_step": 45,
+      "time": "timestep 45",
+      "score": 0.611379,
+      "band": "high",
+      "action": "Human review",
+      "title": "Emerging activity pattern",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 2",
+        "new links 2"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0029",
+      "address": "1dN7z6jWkT3ZWAiaBQjyNDdk256KZwnic",
+      "time_step": 42,
+      "time": "timestep 42",
+      "score": 0.611379,
+      "band": "high",
+      "action": "Human review",
+      "title": "Emerging activity pattern",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 2",
+        "new links 2"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0030",
+      "address": "1FqaLYEuH2q4TcDYvv5zBpT67QyJy5C4Qx",
+      "time_step": 46,
+      "time": "timestep 46",
+      "score": 0.611379,
+      "band": "high",
+      "action": "Human review",
+      "title": "Emerging activity pattern",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 2",
+        "new links 2"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0031",
+      "address": "1BZcV7He2cS5vXzRZRStorBYXqy4DwMecL",
+      "time_step": 44,
+      "time": "timestep 44",
+      "score": 0.611379,
+      "band": "high",
+      "action": "Human review",
+      "title": "Emerging activity pattern",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 2",
+        "new links 2"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0032",
+      "address": "16jzkB5PTsN8pp7bMApwevPYmd8xzT5NrW",
+      "time_step": 36,
+      "time": "timestep 36",
+      "score": 0.611379,
+      "band": "high",
+      "action": "Human review",
+      "title": "Emerging activity pattern",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 2",
+        "new links 2"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0033",
+      "address": "3Q1bn1EsrtBvpH7TUz6bsB241nxVj6kSVZ",
+      "time_step": 39,
+      "time": "timestep 39",
+      "score": 0.611379,
+      "band": "high",
+      "action": "Human review",
+      "title": "Emerging activity pattern",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 2",
+        "new links 2"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0034",
+      "address": "1HPcZrgh2aGwdni8eSdqfcY2krZrKLZ2Z",
+      "time_step": 46,
+      "time": "timestep 46",
+      "score": 0.611379,
+      "band": "high",
+      "action": "Human review",
+      "title": "Emerging activity pattern",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 2",
+        "new links 2"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0035",
+      "address": "1GXrGbCpSuzXbHDU8iSbD8iub1Wx2GxHKq",
+      "time_step": 46,
+      "time": "timestep 46",
+      "score": 0.611379,
+      "band": "high",
+      "action": "Human review",
+      "title": "Emerging activity pattern",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 2",
+        "new links 2"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0036",
+      "address": "1AMVwti4zJ5yx4Z5aNojiey3CYcYtZBUwm",
+      "time_step": 36,
+      "time": "timestep 36",
+      "score": 0.611379,
+      "band": "high",
+      "action": "Human review",
+      "title": "Emerging activity pattern",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 2",
+        "new links 2"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0037",
+      "address": "1GZbccX3cJJbfRC8WuKW1sFiTQXj8MPYpQ",
+      "time_step": 48,
+      "time": "timestep 48",
+      "score": 0.611379,
+      "band": "high",
+      "action": "Human review",
+      "title": "Emerging activity pattern",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 2",
+        "new links 2"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0038",
+      "address": "1HL6tSg5mUrXik5kdFBni4UTrAuPRps3P6",
+      "time_step": 48,
+      "time": "timestep 48",
+      "score": 0.611379,
+      "band": "high",
+      "action": "Human review",
+      "title": "Emerging activity pattern",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 2",
+        "new links 2"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0039",
+      "address": "1JxfosgwwcUUkWKZLU2JvYjQqBwg3TKrea",
+      "time_step": 48,
+      "time": "timestep 48",
+      "score": 0.611379,
+      "band": "high",
+      "action": "Human review",
+      "title": "Emerging activity pattern",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 2",
+        "new links 2"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0040",
+      "address": "3K3vKYA1zM7bJHVG6XuR8FhfzDTkpxeMjf",
+      "time_step": 46,
+      "time": "timestep 46",
+      "score": 0.611379,
+      "band": "high",
+      "action": "Human review",
+      "title": "Emerging activity pattern",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 2",
+        "new links 2"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0041",
+      "address": "1Muu3691WpGxix43DKiE8cKLvmLPgHiWFR",
+      "time_step": 41,
+      "time": "timestep 41",
+      "score": 0.611379,
+      "band": "high",
+      "action": "Human review",
+      "title": "Emerging activity pattern",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 2",
+        "new links 2"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0042",
+      "address": "36524udg8AAiKhXr8ukwFzyWoZ2PCBDq17",
+      "time_step": 41,
+      "time": "timestep 41",
+      "score": 0.611379,
+      "band": "high",
+      "action": "Human review",
+      "title": "Emerging activity pattern",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 2",
+        "new links 2"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0043",
+      "address": "1NtMT873ztuWC13kjMEjK4hpNTm64x58mo",
+      "time_step": 36,
+      "time": "timestep 36",
+      "score": 0.611379,
+      "band": "high",
+      "action": "Human review",
+      "title": "Emerging activity pattern",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 2",
+        "new links 2"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0044",
+      "address": "19bjfgm2LL9peyGzbTcsGfMWderUAufAVp",
+      "time_step": 47,
+      "time": "timestep 47",
+      "score": 0.611379,
+      "band": "high",
+      "action": "Human review",
+      "title": "Emerging activity pattern",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 2",
+        "new links 2"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0045",
+      "address": "1PfDmBfY7RmKZHvj84tSC1t76EprLN9cfZ",
+      "time_step": 48,
+      "time": "timestep 48",
+      "score": 0.611379,
+      "band": "high",
+      "action": "Human review",
+      "title": "Emerging activity pattern",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 2",
+        "new links 2"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0046",
+      "address": "18xe94BpmTXoRz3yYGp6ToR8Z5hfc3erBP",
+      "time_step": 36,
+      "time": "timestep 36",
+      "score": 0.611379,
+      "band": "high",
+      "action": "Human review",
+      "title": "Emerging activity pattern",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 2",
+        "new links 2"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0047",
+      "address": "1Q2pYBwr15F5XTWVrNNCk1gLgckMmkBWZj",
+      "time_step": 42,
+      "time": "timestep 42",
+      "score": 0.611379,
+      "band": "high",
+      "action": "Human review",
+      "title": "Emerging activity pattern",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 2",
+        "new links 2"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0048",
+      "address": "1GTvCozcaZcG1vkzyUogbt3yPKv6yvSe4x",
+      "time_step": 36,
+      "time": "timestep 36",
+      "score": 0.611379,
+      "band": "high",
+      "action": "Human review",
+      "title": "Emerging activity pattern",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 2",
+        "new links 2"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0049",
+      "address": "1347PE3ZDokSsE2Ws1ZvtftPXCuR4NjJsQ",
+      "time_step": 47,
+      "time": "timestep 47",
+      "score": 0.611379,
+      "band": "high",
+      "action": "Human review",
+      "title": "Emerging activity pattern",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 2",
+        "new links 2"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    },
+    {
+      "id": "ACT-0050",
+      "address": "14YdEeFHjthoA4w67Jb6rpvTEmxTW7Rn9W",
+      "time_step": 43,
+      "time": "timestep 43",
+      "score": 0.611379,
+      "band": "high",
+      "action": "Human review",
+      "title": "Emerging activity pattern",
+      "detail": "Recorded model output from the temporal continuation test window.",
+      "evidence": [
+        "tx activity 1",
+        "counterparties 2",
+        "new links 2"
+      ],
+      "model_version": "xgb-graph-v1",
+      "source": "temporal_continuation_rows.csv"
+    }
+  ]
+}

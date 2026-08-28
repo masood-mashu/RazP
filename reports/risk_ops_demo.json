@@ -1,0 +1,45 @@
+{
+  "normal": {
+    "mode": "model",
+    "automatic_blocks": 0,
+    "alerts": [
+      {
+        "address": "demo-missing",
+        "time_step": 48,
+        "score": 0.99,
+        "model_version": "xgb-graph-v1",
+        "missing_features": true,
+        "band": "insufficient_evidence",
+        "action": "human_review"
+      },
+      {
+        "address": "demo-critical",
+        "time_step": 48,
+        "score": 0.91,
+        "model_version": "xgb-graph-v1",
+        "band": "critical",
+        "action": "human_review"
+      },
+      {
+        "address": "demo-high",
+        "time_step": 48,
+        "score": 0.63,
+        "model_version": "xgb-graph-v1",
+        "band": "high",
+        "action": "human_review"
+      }
+    ],
+    "audit": [
+      "duplicate_suppressed:demo-critical:48",
+      "deferred_capacity:demo-monitor:48"
+    ]
+  },
+  "model_failure": {
+    "mode": "rules_only_monitor",
+    "automatic_blocks": 0,
+    "alerts": [],
+    "audit": [
+      "model_unavailable_fallback"
+    ]
+  }
+}

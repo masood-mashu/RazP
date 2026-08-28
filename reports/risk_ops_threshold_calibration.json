@@ -1,0 +1,72 @@
+{
+  "protocol": "validation-only calibration",
+  "horizon": 1,
+  "validation_rows": 538,
+  "validation_positives": 4,
+  "chosen_threshold": 0.571304976940155,
+  "policy": {
+    "critical_score": 0.85,
+    "high_score": 0.571304976940155,
+    "monitor_score": 0.0,
+    "automatic_blocks": 0
+  },
+  "candidates": [
+    {
+      "threshold": 0.25,
+      "alerts": 171,
+      "alert_rate": 0.31784386617100374,
+      "precision": 0.011695906432748537,
+      "recall": 0.5,
+      "f1": 0.022857142857142857
+    },
+    {
+      "threshold": 0.4,
+      "alerts": 168,
+      "alert_rate": 0.31226765799256506,
+      "precision": 0.011904761904761904,
+      "recall": 0.5,
+      "f1": 0.023255813953488372
+    },
+    {
+      "threshold": 0.5,
+      "alerts": 168,
+      "alert_rate": 0.31226765799256506,
+      "precision": 0.011904761904761904,
+      "recall": 0.5,
+      "f1": 0.023255813953488372
+    },
+    {
+      "threshold": 0.571304976940155,
+      "alerts": 167,
+      "alert_rate": 0.3104089219330855,
+      "precision": 0.011976047904191617,
+      "recall": 0.5,
+      "f1": 0.023391812865497075
+    },
+    {
+      "threshold": 0.65,
+      "alerts": 8,
+      "alert_rate": 0.01486988847583643,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    {
+      "threshold": 0.75,
+      "alerts": 7,
+      "alert_rate": 0.013011152416356878,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    {
+      "threshold": 0.85,
+      "alerts": 6,
+      "alert_rate": 0.011152416356877323,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    }
+  ],
+  "note": "The held-out test window was not used for threshold selection."
+}

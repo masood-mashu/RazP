@@ -1,0 +1,203 @@
+{
+  "model": "one_layer_mean_graphsage",
+  "horizon": 1,
+  "features": [
+    "in_tx_count_t",
+    "out_tx_count_t",
+    "tx_count_t",
+    "in_tx_count_last3",
+    "out_tx_count_last3",
+    "tx_count_last3",
+    "in_tx_count_last5",
+    "out_tx_count_last5",
+    "tx_count_last5",
+    "cumulative_in_tx_count",
+    "cumulative_out_tx_count",
+    "cumulative_tx_count",
+    "active_timesteps_to_t",
+    "active_last3_timesteps",
+    "active_last5_timesteps",
+    "in_degree_t",
+    "out_degree_t",
+    "unique_counterparties_t",
+    "unique_counterparties_last3",
+    "unique_counterparties_last5",
+    "new_counterparties_t",
+    "cumulative_unique_counterparties"
+  ],
+  "folds": [
+    {
+      "fold": 1,
+      "train_window": [
+        1,
+        20
+      ],
+      "validation_window": [
+        21,
+        25
+      ],
+      "test_window": [
+        26,
+        30
+      ],
+      "train_rows": 4625,
+      "train_positives": 7,
+      "threshold": 0.11677099764347076,
+      "validation": {
+        "rows": 503,
+        "positives": 9,
+        "average_precision": 0.09329476647107636,
+        "precision": 0.11538461538461539,
+        "recall": 0.6666666666666666,
+        "f1": 0.19672131147540983
+      },
+      "test": {
+        "rows": 235,
+        "positives": 6,
+        "average_precision": 0.07027576547860523,
+        "precision": 0.045454545454545456,
+        "recall": 0.16666666666666666,
+        "f1": 0.07142857142857142
+      }
+    },
+    {
+      "fold": 2,
+      "train_window": [
+        1,
+        25
+      ],
+      "validation_window": [
+        26,
+        30
+      ],
+      "test_window": [
+        31,
+        35
+      ],
+      "train_rows": 5128,
+      "train_positives": 16,
+      "threshold": 0.6380587816238403,
+      "validation": {
+        "rows": 235,
+        "positives": 6,
+        "average_precision": 0.13502112635617128,
+        "precision": 0.18181818181818182,
+        "recall": 0.3333333333333333,
+        "f1": 0.23529411764705882
+      },
+      "test": {
+        "rows": 538,
+        "positives": 4,
+        "average_precision": 0.17212594559208613,
+        "precision": 0.05405405405405406,
+        "recall": 0.5,
+        "f1": 0.0975609756097561
+      }
+    },
+    {
+      "fold": 3,
+      "train_window": [
+        1,
+        30
+      ],
+      "validation_window": [
+        31,
+        35
+      ],
+      "test_window": [
+        36,
+        40
+      ],
+      "train_rows": 5363,
+      "train_positives": 22,
+      "threshold": 0.34654733538627625,
+      "validation": {
+        "rows": 538,
+        "positives": 4,
+        "average_precision": 0.021262450338537298,
+        "precision": 0.02857142857142857,
+        "recall": 0.5,
+        "f1": 0.05405405405405406
+      },
+      "test": {
+        "rows": 445,
+        "positives": 2,
+        "average_precision": 0.01511500547645126,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      }
+    },
+    {
+      "fold": 4,
+      "train_window": [
+        1,
+        35
+      ],
+      "validation_window": [
+        36,
+        40
+      ],
+      "test_window": [
+        41,
+        45
+      ],
+      "train_rows": 5901,
+      "train_positives": 26,
+      "threshold": 0.34878620505332947,
+      "validation": {
+        "rows": 445,
+        "positives": 2,
+        "average_precision": 0.012501750945510575,
+        "precision": 0.01652892561983471,
+        "recall": 1.0,
+        "f1": 0.032520325203252036
+      },
+      "test": {
+        "rows": 796,
+        "positives": 4,
+        "average_precision": 0.01629803973271538,
+        "precision": 0.011857707509881422,
+        "recall": 0.75,
+        "f1": 0.023346303501945526
+      }
+    },
+    {
+      "fold": 5,
+      "train_window": [
+        1,
+        39
+      ],
+      "validation_window": [
+        40,
+        44
+      ],
+      "test_window": [
+        45,
+        49
+      ],
+      "train_rows": 6241,
+      "train_positives": 28,
+      "threshold": 0.599794328212738,
+      "validation": {
+        "rows": 806,
+        "positives": 4,
+        "average_precision": 0.0106330834004403,
+        "precision": 0.015748031496062992,
+        "recall": 0.5,
+        "f1": 0.030534351145038167
+      },
+      "test": {
+        "rows": 464,
+        "positives": 13,
+        "average_precision": 0.05120145835651343,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      }
+    }
+  ],
+  "mean_test_average_precision": 0.06500324292727429,
+  "std_test_average_precision": 0.057540586079355575,
+  "note": "Controlled ablation; same-timestep address neighborhoods only; no future edges or labels used as inputs."
+}

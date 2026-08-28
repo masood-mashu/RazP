@@ -1,0 +1,96 @@
+{
+  "protocol": "rolling-origin validation threshold stability",
+  "horizon": 1,
+  "folds": [
+    {
+      "fold": 1,
+      "validation_window": [
+        21,
+        25
+      ],
+      "rows": 503,
+      "positives": 9,
+      "threshold": 0.05623038485646248,
+      "alerts_at_threshold": 90,
+      "precision": 0.044444444444444446,
+      "recall": 0.4444444444444444,
+      "f1": 0.08080808080808081
+    },
+    {
+      "fold": 2,
+      "validation_window": [
+        26,
+        30
+      ],
+      "rows": 235,
+      "positives": 6,
+      "threshold": 0.4957229495048523,
+      "alerts_at_threshold": 48,
+      "precision": 0.08333333333333333,
+      "recall": 0.6666666666666666,
+      "f1": 0.14814814814814814
+    },
+    {
+      "fold": 3,
+      "validation_window": [
+        31,
+        35
+      ],
+      "rows": 538,
+      "positives": 4,
+      "threshold": 0.571304976940155,
+      "alerts_at_threshold": 167,
+      "precision": 0.011976047904191617,
+      "recall": 0.5,
+      "f1": 0.023391812865497075
+    },
+    {
+      "fold": 4,
+      "validation_window": [
+        36,
+        40
+      ],
+      "rows": 445,
+      "positives": 2,
+      "threshold": 0.016223331913352013,
+      "alerts_at_threshold": 173,
+      "precision": 0.011560693641618497,
+      "recall": 1.0,
+      "f1": 0.022857142857142857
+    },
+    {
+      "fold": 5,
+      "validation_window": [
+        40,
+        44
+      ],
+      "rows": 806,
+      "positives": 4,
+      "threshold": 0.6620345711708069,
+      "alerts_at_threshold": 39,
+      "precision": 0.02564102564102564,
+      "recall": 0.25,
+      "f1": 0.046511627906976744
+    }
+  ],
+  "total_validation_rows": 2527,
+  "total_validation_positives": 25,
+  "threshold_summary": {
+    "mean": 0.36030324287712573,
+    "std": 0.2700938027087282,
+    "min": 0.016223331913352013,
+    "max": 0.6620345711708069,
+    "coefficient_of_variation": 0.7496291194937658
+  },
+  "operational_gate": {
+    "status": "research_only",
+    "reason": "Thresholds vary materially across folds and validation positives remain sparse; collect a larger production-like validation stream before deployment.",
+    "required_before_deployment": [
+      "recalibrate on representative traffic",
+      "monitor alert-rate and recall by time window",
+      "freeze threshold only after drift review",
+      "keep automatic blocks disabled"
+    ]
+  },
+  "source": "reports\\baselines\\rolling_origin_evaluation.json"
+}

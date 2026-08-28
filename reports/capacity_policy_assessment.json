@@ -1,0 +1,49 @@
+{
+  "protocol": "synthetic distribution-preserving proxy capacity assessment",
+  "proxy_rows": 20000,
+  "proxy_batches": 40,
+  "source": "audited Elliptic++ eligible temporal rows sampled with replacement",
+  "results": [
+    {
+      "capacity_per_batch": 10,
+      "batches": 40,
+      "alerts": 400,
+      "alert_rate": 0.02,
+      "known_positive_rows": 120,
+      "captured_known_positive_rows": 40,
+      "indicative_recall": 0.3333333333333333
+    },
+    {
+      "capacity_per_batch": 25,
+      "batches": 40,
+      "alerts": 1000,
+      "alert_rate": 0.05,
+      "known_positive_rows": 120,
+      "captured_known_positive_rows": 61,
+      "indicative_recall": 0.5083333333333333
+    },
+    {
+      "capacity_per_batch": 50,
+      "batches": 40,
+      "alerts": 2000,
+      "alert_rate": 0.1,
+      "known_positive_rows": 120,
+      "captured_known_positive_rows": 76,
+      "indicative_recall": 0.6333333333333333
+    },
+    {
+      "capacity_per_batch": 100,
+      "batches": 40,
+      "alerts": 4000,
+      "alert_rate": 0.2,
+      "known_positive_rows": 120,
+      "captured_known_positive_rows": 91,
+      "indicative_recall": 0.7583333333333333
+    }
+  ],
+  "safety": {
+    "actions_triggered": 0,
+    "automatic_blocks": 0
+  },
+  "interpretation": "Proxy-only operational evidence. It is useful for queue-load testing, not for claims about Razorpay performance or final threshold calibration."
+}

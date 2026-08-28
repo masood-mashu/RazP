@@ -1,0 +1,24 @@
+{
+  "unique_actor_time_observations": 920691,
+  "known_transaction_ids": 46564,
+  "known_illicit_transaction_ids": 4545,
+  "target_counts": {
+    "1": {
+      "positive": 45,
+      "negative": 7466,
+      "excluded": 913180
+    },
+    "3": {
+      "positive": 73,
+      "negative": 17207,
+      "excluded": 903411
+    },
+    "5": {
+      "positive": 85,
+      "negative": 19105,
+      "excluded": 901501
+    }
+  },
+  "target_definition": "known illicit transaction involving the address during the future horizon; unknown-only future windows are excluded",
+  "label_source": "txs_classes.csv joined through AddrTx_edgelist.csv and TxAddr_edgelist.csv"
+}
