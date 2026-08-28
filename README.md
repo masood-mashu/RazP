@@ -21,18 +21,31 @@ The prototype is research-only. Elliptic++ is a public benchmark, not Razorpay p
 
 ## Run the demo
 
-Open two PowerShell windows from `D:\hackathon\RazorPay`.
+Clone the repository and enter its directory:
+
+```bash
+git clone https://github.com/masood-mashu/RazP.git
+cd RazP
+```
+
+Install the API and model dependencies once:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+Open two terminal windows from the cloned repository directory.
 
 Dashboard:
 
 ```powershell
-& "C:\Users\Masood\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe" -m http.server 8765 --directory demo
+python -m http.server 8765 --directory demo
 ```
 
 API with real-time inference:
 
 ```powershell
-& "C:\Users\Masood\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe" api\risk_api.py --artifact demo\data\risk_ops_snapshot.json --model-file models\xgb_graph_horizon1.json --metadata-file models\xgb_graph_horizon1.metadata.json --port 8766
+python api/risk_api.py --artifact demo/data/risk_ops_snapshot.json --model-file models/xgb_graph_horizon1.json --metadata-file models/xgb_graph_horizon1.metadata.json --port 8766
 ```
 
 Open [http://127.0.0.1:8765/](http://127.0.0.1:8765/).
@@ -42,7 +55,7 @@ For the presentation flow, use [DEMO_RUNBOOK.md](DEMO_RUNBOOK.md).
 ## Run tests
 
 ```powershell
-& "C:\Users\Masood\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe" -m unittest discover -s tests -v
+python -m unittest discover -s tests -v
 ```
 
 ## Repository map
@@ -55,6 +68,8 @@ For the presentation flow, use [DEMO_RUNBOOK.md](DEMO_RUNBOOK.md).
 - `demo/` — static risk-operations dashboard.
 - `reports/` — experiment results, policies, readiness notes, and plots.
 - `tests/` — API safeguard tests.
+
+The demo and API run entirely from committed artifacts in `models/` and `demo/data/`; the raw dataset is not required to run the submission. To reproduce the full pipeline, download Elliptic++ from the [official repository](https://github.com/git-disl/EllipticPlusPlus) and place it under `data/raw/ellipticplusplus/`.
 
 ## Further context
 

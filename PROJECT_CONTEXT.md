@@ -382,7 +382,7 @@ Real-time behavior:
 Run tests from the project root:
 
 ```powershell
-& "C:\Users\Masood\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe" -m unittest discover -s tests -v
+python -m unittest discover -s tests -v
 ```
 
 Current result: 5 API safeguard tests pass.
@@ -399,20 +399,24 @@ The existing risk-operations simulator also covers duplicate suppression, missin
 
 ## 16. How to run the current demo
 
-Open two PowerShell windows.
+Clone the repository, install dependencies, and open two terminals:
+
+```bash
+git clone https://github.com/masood-mashu/RazP.git
+cd RazP
+python -m pip install -r requirements.txt
+```
 
 Dashboard window:
 
 ```powershell
-cd D:\hackathon\RazorPay
-& "C:\Users\Masood\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe" -m http.server 8765 --directory demo
+python -m http.server 8765 --directory demo
 ```
 
 API window:
 
 ```powershell
-cd D:\hackathon\RazorPay
-& "C:\Users\Masood\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe" api\risk_api.py --artifact demo\data\risk_ops_snapshot.json --model-file models\xgb_graph_horizon1.json --metadata-file models\xgb_graph_horizon1.metadata.json --port 8766
+python api/risk_api.py --artifact demo/data/risk_ops_snapshot.json --model-file models/xgb_graph_horizon1.json --metadata-file models/xgb_graph_horizon1.metadata.json --port 8766
 ```
 
 Open:

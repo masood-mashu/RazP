@@ -9,11 +9,13 @@ The dashboard loads `data/risk_ops_snapshot.json` at startup. This recorded arti
 From the project root, start the API in a second PowerShell window:
 
 ```powershell
-& "C:\Users\Masood\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe" api\risk_api.py --artifact demo\data\risk_ops_snapshot.json --model-file models\xgb_graph_horizon1.json --metadata-file models\xgb_graph_horizon1.metadata.json --port 8766
+python api/risk_api.py --artifact demo/data/risk_ops_snapshot.json --model-file models/xgb_graph_horizon1.json --metadata-file models/xgb_graph_horizon1.metadata.json --port 8766
 ```
 
 Keep the dashboard server running on port `8765`, open the dashboard, and choose `Connect API`. If the API is unavailable, the dashboard remains in recorded mode.
 
 API endpoints: `/health`, `/metrics`, `/alerts`, and `POST /score` with `{ "address": "...", "time_step": 46 }`.
 
-The alert queue is intentionally a controlled demo scenario; it is not a live scoring feed. Open `index.html` directly or serve this folder with a local static web server.
+The alert queue is intentionally a controlled demo scenario; it is not a live scoring feed. The demo and API run from committed artifacts and do not require the raw dataset. To reproduce the full pipeline, download Elliptic++ from the [official repository](https://github.com/git-disl/EllipticPlusPlus) and place it under `data/raw/ellipticplusplus/`.
+
+Open `index.html` directly only for static inspection; use the local web server for the full dashboard.

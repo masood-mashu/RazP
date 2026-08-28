@@ -6,20 +6,24 @@ Use the transaction graph observed so far to rank actors who may show illicit ac
 
 ## Start the demo
 
-Open two PowerShell windows.
+Clone the repository, install dependencies, and open two terminals:
+
+```bash
+git clone https://github.com/masood-mashu/RazP.git
+cd RazP
+python -m pip install -r requirements.txt
+```
 
 Window 1 — dashboard:
 
 ```powershell
-cd D:\hackathon\RazorPay
-& "C:\Users\Masood\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe" -m http.server 8765 --directory demo
+python -m http.server 8765 --directory demo
 ```
 
 Window 2 — API:
 
 ```powershell
-cd D:\hackathon\RazorPay
-& "C:\Users\Masood\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe" api\risk_api.py --artifact demo\data\risk_ops_snapshot.json --model-file models\xgb_graph_horizon1.json --metadata-file models\xgb_graph_horizon1.metadata.json --port 8766
+python api/risk_api.py --artifact demo/data/risk_ops_snapshot.json --model-file models/xgb_graph_horizon1.json --metadata-file models/xgb_graph_horizon1.metadata.json --port 8766
 ```
 
 Open [http://127.0.0.1:8765/](http://127.0.0.1:8765/).
