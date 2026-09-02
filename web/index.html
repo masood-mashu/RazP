@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentinel-Recover | Razorpay Payment Operations & Risk Console</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- System Navigation / Header -->
+        <header class="app-header">
+            <div class="header-left">
+                <div class="brand-badge">
+                    <span class="rzp-logo-shield">🛡️</span>
+                    <div>
+                        <h1 class="brand-title">SENTINEL-RECOVER</h1>
+                        <p class="brand-subtitle">Razorpay Guardrailed Payment Recovery Engine (Track 03)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="header-system-meta" id="headerSystemMeta">
+                <div class="meta-item"><span class="meta-dot pulse-green"></span> <span class="meta-label">SYSTEM:</span> <span class="meta-val highlight" id="sysStatus">OPERATIONAL</span></div>
+                <div class="meta-item"><span class="meta-label">PROVIDER:</span> <span class="meta-val" id="sysProvider">Gemini</span></div>
+                <div class="meta-item"><span class="meta-label">MODEL:</span> <span class="meta-val" id="sysModel">gemini-3.7-flash</span></div>
+                <div class="meta-item"><span class="meta-label">PROMPT:</span> <span class="meta-val" id="sysPrompt">v1.0.0</span></div>
+                <div class="meta-item"><span class="meta-label">TESTS:</span> <span class="meta-val success bold" id="sysTests">67/67 PASS</span></div>
+            </div>
+
+            <div class="header-actions">
+                <button id="btnRunReviewerDemo" class="btn btn-hero">
+                    <span class="btn-icon">⚡</span> RUN REVIEWER DEMO
+                </button>
+            </div>
+        </header>
+
+        <!-- KPI Metrics Ribbon -->
+        <div class="kpi-ribbon">
+            <div class="kpi-card">
+                <div class="kpi-title">NET MONEY RECOVERED</div>
+                <div class="kpi-value" id="kpiNetRecovered">₹190,370</div>
+                <div class="kpi-sub success">68 Held-Out Eval Corpus</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title">NET RECOVERY RATIO (NMRR)</div>
+                <div class="kpi-value" id="kpiNMRR">81.64%</div>
+                <div class="kpi-sub">Gross ₹190,370 - Op Costs</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title">UNSAFE ACTIONS EXECUTED</div>
+                <div class="kpi-value success" id="kpiViolations">0</div>
+                <div class="kpi-sub success">100% Policy Gate Intercepted</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title">DISASTER CHARGEBACKS</div>
+                <div class="kpi-value success" id="kpiChargebacks">0</div>
+                <div class="kpi-sub success">Recon Lock Protected</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title">ACTION ACCURACY</div>
+                <div class="kpi-value highlight" id="kpiAccuracy">89.71%</div>
+                <div class="kpi-sub">+32.36% vs Advanced Rules</div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard Workspace -->
+        <div class="dashboard-grid">
+            
+            <!-- Left Panel: Live Payment Inspector & Adversarial Lab -->
+            <div class="panel left-panel">
+                <div class="panel-header">
+                    <h3>🔍 Live Payment Telemetry Inspector</h3>
+                    <div class="preset-wrapper">
+                        <select id="presetSelect" class="preset-dropdown">
+                            <option value="flagship_deemed">⭐ Flagship: U30 Timeout + Debit Claim (₹3,200)</option>
+                            <option value="hinglish_ptp">Scenario 2: Hinglish PTP ("7 tareek ko katna")</option>
+                            <option value="adversarial_discount">Scenario 3: 50% Discount Extortion Attack</option>
+                            <option value="quiet_hours">Scenario 4: Midnight TRAI Quiet Hours (23:30 IST)</option>
+                            <option value="bank_degradation">Scenario 5: Bank Switch Failure (Score 0.85)</option>
+                            <option value="dead_card">Scenario 6: Stolen/Blocked Card (ISO 41)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="panel-body">
+                    <form id="evalForm" class="inspector-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Payment ID</label>
+                                <input type="text" id="inpPaymentId" value="pay_demo_u30_001" class="text-input font-mono">
+                            </div>
+                            <div class="form-group">
+                                <label>Amount (INR)</label>
+                                <input type="number" id="inpAmount" value="3200.0" class="text-input font-mono">
+                            </div>
+                            <div class="form-group">
+                                <label>Payment Method</label>
+                                <select id="inpMethod" class="select-input font-mono">
+                                    <option value="UPI_AUTOPAY">UPI AutoPay</option>
+                                    <option value="CARD_MANDATE">Card Mandate</option>
+                                    <option value="UPI_COLLECT">UPI Collect</option>
+                                    <option value="NETBANKING">Netbanking</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Gateway Error Code</label>
+                                <input type="text" id="inpGwError" value="GATEWAY_TIMEOUT" class="text-input font-mono">
+                            </div>
+                            <div class="form-group">
+                                <label>Bank Raw Response Code</label>
+                                <input type="text" id="inpBankCode" value="U30" class="text-input font-mono">
+                            </div>
+                            <div class="form-group">
+                                <label>Switch Degradation (0-1)</label>
+                                <input type="number" step="0.05" min="0" max="1" id="inpDegradation" value="0.85" class="text-input font-mono">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Inbound Customer Message (English / Hindi / Hinglish / Injection)</label>
+                            <textarea id="inpMessage" rows="2" class="textarea-input">bhai mere account se 3200 kat gaye par order confirm nahi hua, please help dobara mat katna</textarea>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Evaluation Timestamp (IST)</label>
+                                <input type="text" id="inpTime" value="2026-09-01T14:00:00" class="text-input font-mono">
+                            </div>
+                            <div class="form-group">
+                                <label>Attempt Count</label>
+                                <input type="number" id="inpAttemptCount" value="1" min="1" max="5" class="text-input font-mono">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block" id="btnEvaluate">
+                            <span>Execute Sentinel Recovery Pipeline</span>
+                        </button>
+                    </form>
+
+                    <!-- Adversarial Attack Lab -->
+                    <div class="adversarial-lab">
+                        <div class="lab-title">⚡ Adversarial Red-Team Probe Lab</div>
+                        <div class="lab-btn-grid">
+                            <button type="button" class="btn-attack" id="btnAtkDiscount">🚨 1. 50% Discount Injection</button>
+                            <button type="button" class="btn-attack" id="btnAtkDebit">🚨 2. Double-Debit Claim</button>
+                            <button type="button" class="btn-attack" id="btnAtkQuiet">🚨 3. Quiet Hours (21:01 IST)</button>
+                            <button type="button" class="btn-attack" id="btnAtkPollution">🚨 4. Parameter Pollution</button>
+                            <button type="button" class="btn-attack" id="btnAtkReplay">🚨 5. Webhook Replay</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Center Panel: Visual Processing Spine -->
+            <div class="panel center-panel">
+                <div class="panel-header">
+                    <h3>⚡ Guardrailed Neuro-Symbolic Spine</h3>
+                    <div class="spine-status-tag" id="spineStatus">READY</div>
+                </div>
+
+                <div class="panel-body">
+                    <!-- Step 1: AI Semantic Reasoner -->
+                    <div class="spine-block ai-block">
+                        <div class="block-header">
+                            <span class="block-num">STEP 1</span>
+                            <span class="block-title">Gemini Semantic Reasoner</span>
+                            <span class="provenance-tag" id="provTag">gemini-3.7-flash | v1.0.0</span>
+                        </div>
+                        <div class="block-content font-mono" id="aiOutputBox">
+                            <span class="empty-state">Awaiting transaction evaluation...</span>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Policy Gate Hero Feature -->
+                    <div class="spine-block gate-block hero-gate">
+                        <div class="block-header">
+                            <span class="block-num">STEP 2</span>
+                            <span class="block-title">Deterministic Policy Gate (Authoritative Safety Boundary)</span>
+                            <span class="gate-verdict-tag" id="gateVerdictTag">INSPECTION ACTIVE</span>
+                        </div>
+                        <div class="gate-hero-flow">
+                            <div class="gate-flow-item">
+                                <div class="flow-label">AI PROPOSED</div>
+                                <div class="flow-val" id="flowAiAction">-</div>
+                            </div>
+                            <div class="gate-flow-arrow">➔</div>
+                            <div class="gate-flow-item">
+                                <div class="flow-label">POLICY GATE</div>
+                                <div class="flow-val highlight" id="flowGateAction">-</div>
+                            </div>
+                            <div class="gate-flow-arrow">➔</div>
+                            <div class="gate-flow-item">
+                                <div class="flow-label">FINAL EXECUTED</div>
+                                <div class="flow-val success" id="flowExecAction">-</div>
+                            </div>
+                        </div>
+                        <div class="block-content font-mono" id="gateOutputBox">
+                            <span class="empty-state">Deterministic safety rules armed.</span>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: State Machine, Executor & Invariant Monitor -->
+                    <div class="spine-block state-block">
+                        <div class="block-header">
+                            <span class="block-num">STEP 3</span>
+                            <span class="block-title">State Machine, Ledger & Invariant Monitor</span>
+                        </div>
+                        <div class="block-content font-mono" id="stateOutputBox">
+                            <span class="empty-state">State transitions queued.</span>
+                        </div>
+
+                        <!-- Real-time Invariant Verification Checklist -->
+                        <div class="invariant-checklist">
+                            <div class="inv-item"><span class="inv-check">✓</span> Amount Immutable</div>
+                            <div class="inv-item"><span class="inv-check">✓</span> No Unauthorized Discounts</div>
+                            <div class="inv-item"><span class="inv-check">✓</span> TRAI Quiet Hours (21:00-09:00 IST)</div>
+                            <div class="inv-item"><span class="inv-check">✓</span> Contact Ceiling (<=3)</div>
+                            <div class="inv-item"><span class="inv-check">✓</span> Debit Claim -> Recon Lock</div>
+                            <div class="inv-item"><span class="inv-check">✓</span> PTP <= 14-Day Horizon</div>
+                            <div class="inv-item"><span class="inv-check">✓</span> Mandate Revocation Enforced</div>
+                            <div class="inv-item"><span class="inv-check">✓</span> RECOVERED Requires Settlement</div>
+                            <div class="inv-item"><span class="inv-check">✓</span> Webhook Replay Idempotent</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Tabs for Ablation, Ledger, Multi-Event -->
+            <div class="panel right-panel">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="tabAblation">6-Way Benchmark</button>
+                    <button class="tab-btn" data-tab="tabLedger">Cryptographic Ledger</button>
+                    <button class="tab-btn" data-tab="tabMultiEvent">Multi-Event Demo</button>
+                </div>
+
+                <!-- Tab 1: 6-Way Ablation Benchmark Scorecard -->
+                <div id="tabAblation" class="tab-content active">
+                    <div class="scorecard-header">
+                        <div>
+                            <h4>68-Case Held-Out Benchmark</h4>
+                            <p class="benchmark-sub">Deterministic simulation | SHA-256: aa125d85df95...</p>
+                        </div>
+                        <button id="runBenchmarkBtn" class="btn btn-sm btn-outline">
+                            <span class="btn-icon">⚡</span> Run Benchmark
+                        </button>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="ablation-table">
+                            <thead>
+                                <tr>
+                                    <th>Evaluation Dimension</th>
+                                    <th>A. Simple</th>
+                                    <th>B. Adv (Regex)</th>
+                                    <th>C. Pure LLM</th>
+                                    <th>D. Schema</th>
+                                    <th>E. Gate</th>
+                                    <th class="highlight-col">F. Sentinel</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ablationTableBody">
+                                <!-- Populated dynamically by app.js -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="benchmark-callout">
+                        <strong>📌 Key Architectural Finding:</strong> Unconstrained LLMs score 75% accuracy and commit 18 safety breaches (granting illegal 20% discounts). Sentinel-Recover eliminates 100% of breaches, recovers ₹9,450 more net revenue, and achieves 89.71% accuracy.
+                    </div>
+                </div>
+
+                <!-- Tab 2: Cryptographic Audit Ledger -->
+                <div id="tabLedger" class="tab-content">
+                    <div class="scorecard-header">
+                        <div>
+                            <h4>SHA-256 Immutable Audit Ledger</h4>
+                            <p class="benchmark-sub">Cryptographic hash chain verifying non-repudiation</p>
+                        </div>
+                        <div class="ledger-actions">
+                            <button id="btnTamperTest" class="btn btn-sm btn-danger">Simulate Tamper</button>
+                            <button id="btnRestoreLedger" class="btn btn-sm btn-outline hidden">Restore Ledger</button>
+                        </div>
+                    </div>
+
+                    <div id="tamperAlert" class="tamper-alert hidden"></div>
+
+                    <div class="ledger-blocks-container" id="ledgerBlockList">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+
+                <!-- Tab 3: Multi-Event Idempotency Demo -->
+                <div id="tabMultiEvent" class="tab-content">
+                    <div class="scorecard-header">
+                        <div>
+                            <h4>Multi-Event Recovery & Replay Protection</h4>
+                            <p class="benchmark-sub">Demonstrates idempotent webhook deduplication</p>
+                        </div>
+                        <button id="btnRunMultiEvent" class="btn btn-sm btn-primary">
+                            Run Multi-Event Flow
+                        </button>
+                    </div>
+
+                    <div class="multi-event-trace" id="multiEventTrace">
+                        <div class="empty-state">Click 'Run Multi-Event Flow' to simulate: Payment Failure ➔ Recon Confirmation ➔ Duplicate Webhook Replay.</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Reviewer Demo Modal / Overlay -->
+    <div id="demoModal" class="demo-modal hidden">
+        <div class="demo-modal-content">
+            <div class="demo-modal-header">
+                <h3>🎬 Sentinel-Recover: 6-Scene Reviewer Demo Journey</h3>
+                <button id="btnCloseDemo" class="btn-close">&times;</button>
+            </div>
+            <div class="demo-modal-body">
+                <div class="demo-timeline" id="demoTimeline">
+                    <div class="timeline-step active" data-step="1">1. Hard Case (U30 Timeout)</div>
+                    <div class="timeline-step" data-step="2">2. Policy Gate Interception</div>
+                    <div class="timeline-step" data-step="3">3. Adversarial Injection</div>
+                    <div class="timeline-step" data-step="4">4. Recon Settlement</div>
+                    <div class="timeline-step" data-step="5">5. Webhook Replay No-Op</div>
+                    <div class="timeline-step" data-step="6">6. Cryptographic Tamper</div>
+                </div>
+                <div class="demo-scene-display" id="demoSceneDisplay">
+                    <h4 id="demoSceneTitle">Scene 1: Real-world Failure Telemetry Ingestion</h4>
+                    <p id="demoSceneDesc">Ingesting high-risk payment failure (₹3,200, bank timeout code U30, 12,400ms latency) with customer Hinglish double-debit panic message.</p>
+                    <div class="demo-scene-output font-mono" id="demoSceneOutput"></div>
+                </div>
+            </div>
+            <div class="demo-modal-footer">
+                <button id="btnDemoPrev" class="btn btn-outline" disabled>Previous Scene</button>
+                <button id="btnDemoNext" class="btn btn-primary">Next Scene (Scene 2) ➔</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
