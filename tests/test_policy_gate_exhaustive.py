@@ -9,7 +9,7 @@ from core.schemas import (
     CustomerIntentCategory,
     PaymentMethod
 )
-from core.policy_gate import DeterministicPolicyGate
+from core.policy_gate import DeterministicPolicyGate, IST
 
 
 @pytest.fixture
@@ -44,7 +44,7 @@ def sample_telemetry():
 ])
 def test_quiet_hours_exact_boundaries(sample_telemetry, hour, minute, second, expected_blocked):
     gate = DeterministicPolicyGate()
-    eval_time = datetime(2026, 9, 1, hour, minute, second)
+    eval_time = datetime(2026, 9, 1, hour, minute, second, tzinfo=IST)
     
     ai_out = AIReasonerOutput(
         root_cause=RootCauseCategory.INSUFFICIENT_FUNDS,

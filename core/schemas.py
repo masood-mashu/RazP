@@ -177,14 +177,37 @@ class ExecutionResult(BaseModel):
     timestamp: datetime = Field(default_factory=datetime.utcnow)
 
 
+class UserRole(str, Enum):
+    OPERATOR = "operator"
+    POLICY_ADMIN = "policy_admin"
+    AUDITOR = "auditor"
+    ADMIN = "admin"
+
+
+class ActorContext(BaseModel):
+    actor_id: str
+    role: UserRole
+    correlation_id: str
+
+
 class AuditBlock(BaseModel):
     index: int
     timestamp: str
     payment_id: str
     telemetry_hash: str
-    ai_reasoning: Optional[Dict[str, Any]]
+    ai_reasoning: Optional[Dict[str, Any]] = None
     policy_decision: Dict[str, Any]
     action_executed: str
     resulting_state: str
     previous_hash: str
     current_hash: str
+    correlation_id: Optional[str] = None
+    actor_id: Optional[str] = None
+    policy_version: Optional[str] = None
+    model_name: Optional[str] = None
+    prompt_version: Optional[str] = None
+    before_state: Optional[str] = None
+    after_state: Optional[str] = None
+    idempotency_key: Optional[str] = None
+    block_timestamp_dt: Optional[datetime] = None
+

@@ -12,3 +12,8 @@ __pycache__/
 scratch/
 .DS_Store
 Thumbs.db
+REVIVE/
+RazP/
+.pg_test/
+node_modules/
+dist/

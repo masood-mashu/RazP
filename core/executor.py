@@ -59,6 +59,8 @@ class RecoveryExecutor:
             target_state = PaymentState.DEAD_LETTER
 
         # Perform atomic transition on state machine
+        transition_error = None
+        execution_succeeded = True
         try:
             # If current state is PAYMENT_FAILED, transition through analysis/policy to target
             if state_machine.current_state == PaymentState.PAYMENT_FAILED:
@@ -69,9 +71,14 @@ class RecoveryExecutor:
                 state_machine.transition(PaymentState.POLICY_GATED, "Policy gate re-evaluated")
             
             state_machine.transition(target_state, policy_decision.policy_reason)
-        except Exception:
-            # Safety catch: if invalid transition attempted, force safe hold state
+        except Exception as exc:
+            # Do not report a rejected transition as a successful execution.
+            transition_error = str(exc)
+            execution_succeeded = False
             target_state = state_machine.current_state
+
+        if transition_error:
+            policy_decision.final_parameters = {**policy_decision.final_parameters, "execution_error": transition_error}
 
         # Immutable ledger recording
         self.ledger.record_entry(
@@ -83,7 +90,7 @@ class RecoveryExecutor:
         )
 
         return ExecutionResult(
-            success=True,
+            success=execution_succeeded,
             action_executed=action,
             resulting_state=state_machine.current_state,
             details=policy_decision.final_parameters,

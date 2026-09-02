@@ -48,10 +48,8 @@ class DeterministicPolicyGate:
         
         # If naive datetime, assume UTC and convert to IST
         if now.tzinfo is None:
-            # If date timestamp has no tz, treat as IST if passed from simulation or convert from UTC
-            check_time = now.time()
-        else:
-            check_time = now.astimezone(IST).time()
+            now = now.replace(tzinfo=timezone.utc)
+        check_time = now.astimezone(IST).time()
 
         start = self.policy.quiet_hours_start # 21:00
         end = self.policy.quiet_hours_end     # 09:00
@@ -193,6 +191,15 @@ class DeterministicPolicyGate:
                 final_action = ActionType.SEND_PAYMENT_LINK
                 sanitized_params = {"channel": "SMS", "method_fallback": "NEW_PAYMENT_METHOD_REQUIRED"}
                 reasons.append("Blocked hopeless retry on dead method. Requested new payment method.")
+
+        # Final outbound communication guard. Keep this after all action-rewriting
+        # rules so later fallbacks cannot bypass quiet-hours enforcement.
+        if final_action == ActionType.SEND_PAYMENT_LINK and self.is_in_quiet_hours(now):
+            violations.append("QUIET_HOURS_VIOLATION: Outbound communication blocked during 21:00-09:00 IST (TRAI TCCCPR)")
+            is_overridden = True
+            final_action = ActionType.ABSTAIN_DO_NOTHING
+            sanitized_params = {"reason": "Shifted to quiet hours queue. Outbound message deferred to 09:01 AM IST."}
+            reasons.append("Outbound communication suppressed during quiet hours.")
 
         # Parameter validation for RETRY_BACKOFF bounds
         if final_action == ActionType.RETRY_BACKOFF:

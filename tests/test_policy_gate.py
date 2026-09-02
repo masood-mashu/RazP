@@ -9,7 +9,7 @@ from core.schemas import (
     CustomerIntentCategory,
     PaymentMethod
 )
-from core.policy_gate import DeterministicPolicyGate
+from core.policy_gate import DeterministicPolicyGate, IST
 
 
 @pytest.fixture
@@ -71,7 +71,7 @@ def test_quiet_hours_blocks_outbound_messages(base_telemetry):
     gate = DeterministicPolicyGate()
     
     # Simulate nighttime: 23:30 (11:30 PM IST)
-    night_time = datetime(2026, 9, 1, 23, 30, 0)
+    night_time = datetime(2026, 9, 1, 23, 30, 0, tzinfo=IST)
     
     ai_output = AIReasonerOutput(
         root_cause=RootCauseCategory.INSUFFICIENT_FUNDS,

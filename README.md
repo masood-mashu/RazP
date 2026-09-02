@@ -3,9 +3,10 @@
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.136+-009688.svg)](https://fastapi.tiangolo.com)
-[![Pytest](https://img.shields.io/badge/pytest-67%20passed%20(100%25)-brightgreen.svg)](https://docs.pytest.org)
-[![Gemini](https://img.shields.io/badge/AI%20Reasoner-Gemini%20Flash--Lite%20(v1.0.0)-8E44AD.svg)](file:///d:/hackathon/RazorPay/core/gemini_reasoner.py)
-[![Audit Ledger](https://img.shields.io/badge/Audit%20Ledger-SHA--256%20Chained-success.svg)](file:///d:/hackathon/RazorPay/core/ledger.py)
+[![Pytest](https://img.shields.io/badge/pytest-99%20passed%20(100%25)-brightgreen.svg)](https://docs.pytest.org)
+[![Gemini](https://img.shields.io/badge/AI%20Reasoner-Gemini%20Flash--Lite%20(v1.0.0)-8E44AD.svg)](core/gemini_reasoner.py)
+[![Persistence](https://img.shields.io/badge/Persistence-PostgreSQL%20Durable-336791.svg)](core/persistence.py)
+[![Audit Ledger](https://img.shields.io/badge/Audit%20Ledger-SHA--256%20Chained-success.svg)](core/ledger.py)
 [![GitHub](https://img.shields.io/badge/GitHub-masood--mashu%2FRazP-181717.svg)](https://github.com/masood-mashu/RazP)
 
 ---
@@ -14,15 +15,31 @@
 
 > **“Given a failed payment and all available evidence, determine the safest next recovery action and execute it within hard financial, communication, and regulatory constraints.”**
 
-In Indian payment ecosystems (UPI AutoPay, Mandates, Cards), payment failures degrade across non-linear failure modes: ambiguous gateway timeouts, messy multilingual Hinglish customer communications, bank switch degradation, and deemed-success race conditions.
+In Indian payment ecosystems (UPI AutoPay, Mandates, Cards, NetBanking), payment failures degrade across non-linear failure modes: ambiguous gateway timeouts, noisy multilingual Hinglish customer communications, bank switch degradation, and deemed-success race conditions.
 
-Standard industry rule engines either spam degraded bank switches or fail to parse natural language commitments, leaving recoverable revenue on the table while triggering customer chargebacks. Unconstrained LLMs hallucinate unauthorized discounts and violate TRAI quiet hours.
+Standard industry rule engines either spam degraded bank switches or fail to parse natural language commitments, leaving recoverable revenue on the table while triggering customer chargebacks. Conversely, unconstrained LLMs hallucinate unauthorized discounts, make invalid financial assertions, and violate TRAI quiet hours.
 
-**RazP** implements a guardrailed neuro-symbolic architecture: **Gemini Flash performs unstructured semantic interpretation and proposes structured actions**, while an **authoritative deterministic spine owns money, policy, quiet hours, state transitions, idempotency, and cryptographic audit non-repudiation**.
+**RazP** implements a guardrailed neuro-symbolic architecture: **Google Gemini Flash-Lite performs unstructured semantic interpretation and proposes structured actions**, while an **authoritative deterministic spine owns money, policy, quiet hours, state transitions, idempotency, and cryptographic audit non-repudiation**.
 
 ---
 
-## 2. Clear Boundary: AI vs. Deterministic Responsibilities
+## 2. Real Live Verification Claims & Provenance
+
+Every claim in this repository is backed by live executable code, an automated test suite, cryptographic verification, and genuine live API calls:
+
+| Claim / Invariant | Verification Mechanism | Status & Evidence |
+|---|---|:---:|
+| **99 Automated Invariant & Security Tests** | Pytest test suite covering state transitions, PostgreSQL durability, RBAC, tamper-detection, and adversarial red-teaming | **100% PASS** (`99 passed in 17.68s`) |
+| **TRAI Quiet Hours (21:00–09:00 IST)** | Timezone-aware normalization (`UTC -> IST`) preventing outbound messages in night windows | **VERIFIED** ([`core/policy_gate.py:47-61`](core/policy_gate.py#L47-L61), [`tests/test_submission_regressions.py:98`](tests/test_submission_regressions.py#L98)) |
+| **Durable Idempotency & Webhook Deduplication** | SHA-256 event-payload deduplication before AI reasoning or state dispatch | **VERIFIED** ([`server/app.py:406-491`](server/app.py#L406-L491), [`core/persistence.py:348-379`](core/persistence.py#L348-L379)) |
+| **Escalation Recovery Invariant** | Authoritative settlement reconciliation can close cases under human escalation | **VERIFIED** ([`core/state_machine.py:69-74`](core/state_machine.py#L69-L74), [`tests/test_submission_regressions.py:117`](tests/test_submission_regressions.py#L117)) |
+| **Zero AI Financial Authority** | Strict parameter allow-listing and keyword stripping for unauthorized discounts | **VERIFIED** ([`core/policy_gate.py:29-37, 75-112`](core/policy_gate.py#L29-L37)) |
+| **Cryptographic Audit Ledger** | SHA-256 hash-chained tamper-evident block sequence with live corruption detection | **VERIFIED** ([`core/ledger.py:92-115`](core/ledger.py#L92-L115), [`core/persistence.py:585-613`](core/persistence.py#L585-L613)) |
+| **Live Gemini API Inference** | 68/68 genuine live API calls against `gemini-flash-lite-latest` (0 simulated fallbacks) | **95.59% Action Acc**, **1.0 Macro-F1**, **100% PTP Acc** ([`reports/gemini_eval_results.json`](reports/gemini_eval_results.json)) |
+
+---
+
+## 3. Clear Boundary: AI vs. Deterministic Responsibilities
 
 | Responsibility Domain | Gemini Semantic Reasoner (AI Zone) | Deterministic Spine (Zero AI Zone) |
 |---|:---:|:---:|
@@ -38,10 +55,14 @@ Standard industry rule engines either spam degraded bank switches or fail to par
 
 ---
 
-## 3. Invariant Neuro-Symbolic Pipeline
+## 4. Invariant Neuro-Symbolic Pipeline
 
 ```
 Observable Failure Telemetry + Inbound Customer Message
+                         │
+                         ▼
+        [Durable Idempotency & Webhook Dedup Gate]
+        (SHA-256 Event Gate: Suppresses Replays Before LLM Cost)
                          │
                          ▼
         [Gemini Flash Semantic Reasoner]
@@ -54,7 +75,7 @@ Observable Failure Telemetry + Inbound Customer Message
    [Deterministic Policy Gate (TRAI Quiet Hours, 0% Discounts, Max 3 Attempts, Recon Lock)]
                          │
                          ▼ (Approved or Overridden PolicyDecision)
-   [Deterministic Action Executor & State Machine (Idempotent Webhook Deduplication)]
+   [Deterministic Action Executor & State Machine (PostgreSQL Row-Locked Transitions)]
                          │
                          ▼
    [Cryptographic SHA-256 Hash-Chained Audit Ledger]
@@ -62,9 +83,9 @@ Observable Failure Telemetry + Inbound Customer Message
 
 ---
 
-## 4. Benchmark & Ablation Results (68 Held-Out Cases)
+## 5. Benchmark & Ablation Results (68 Held-Out Cases)
 
-Evaluated on immutable [`benchmark/eval_cases.json`](file:///d:/hackathon/RazorPay/benchmark/eval_cases.json) (Dataset SHA-256: `aa125d85df95fc20b6e5dc0e4dce86555f502495cc3b6206817e64702da85c31`, ₹311,950 at risk):
+Evaluated on held-out [`benchmark/eval_cases.json`](benchmark/eval_cases.json) (Dataset SHA-256: `aa125d85df95fc20b6e5dc0e4dce86555f502495cc3b6206817e64702da85c31`, ₹311,950 at risk):
 
 ### A. Architectural Ablation Matrix (Offline Baselines)
 ```
@@ -88,20 +109,20 @@ F. Full Sentinel-Recover (Baseline)         89.71%        48.53%         INR  19
 * **Multilingual PTP Extraction Accuracy:** **100.0%** (MAE: 1.00 day)
 * **Unsafe Executions:** **0** (100% intercepted by Policy Gate)
 * **Disaster Chargebacks:** **0**
-* **Telemetry Evidence:** [`reports/GEMINI_LIVE_EVAL.md`](file:///d:/hackathon/RazorPay/reports/GEMINI_LIVE_EVAL.md) & [`reports/gemini_eval_results.json`](file:///d:/hackathon/RazorPay/reports/gemini_eval_results.json)
+* **Telemetry Evidence:** [`reports/GEMINI_LIVE_EVAL.md`](reports/GEMINI_LIVE_EVAL.md) & [`reports/gemini_eval_results.json`](reports/gemini_eval_results.json)
 
 ---
 
-## 5. Repository Structure
+## 6. Repository Structure
 
 ```
-d:/hackathon/RazorPay/
+d:/hackathon/RazorPay/RazP/
 ├── core/
 │   ├── schemas.py              # Strict Pydantic schemas (Telemetry, Actions, Policies, States)
 │   ├── gemini_reasoner.py      # Production google-genai adapter with native response_schema
-│   ├── policy_gate.py          # Deterministic safety gate (Quiet hours, rate limits, zero discounts)
-│   ├── state_machine.py        # FSM with transition invariants & SHA-256 event deduplication
-│   ├── baselines.py            # Simple Rules, Advanced Rules (Regex), and Pure-LLM baselines
+│   ├── policy_gate.py          # Deterministic safety gate (IST quiet hours, rate limits, zero discounts)
+│   ├── state_machine.py        # FSM with transition invariants, escalation paths & idempotency
+│   ├── persistence.py          # PostgreSQL persistence manager (Connection pool, row locks, audit)
 │   ├── executor.py             # Deterministic action dispatcher & operational cost accountant
 │   └── ledger.py               # Cryptographic SHA-256 hash-chained audit ledger
 ├── prompts/
@@ -109,64 +130,77 @@ d:/hackathon/RazorPay/
 ├── simulator/
 │   └── environment.py          # Seeded deterministic customer & bank simulation engine
 ├── benchmark/
-│   ├── dataset_generator.py    # 100-case generator (32 dev + 68 eval across 6 categories)
+│   ├── dataset_generator.py    # 100-case generator (32 dev + 68 held-out eval across 6 categories)
 │   ├── dev_cases.json          # 32 Fixed Development Cases
 │   ├── eval_cases.json         # 68 Fixed Held-Out Evaluation Cases
 │   ├── evaluator.py            # Component-level & end-to-end metrics calculator
 │   ├── run_ablation.py         # 6-way ablation benchmark runner
 │   └── run_gemini_eval.py      # Live Gemini evaluation runner with provenance tracking
 ├── server/
-│   └── app.py                  # FastAPI server with live evaluation, multi-event, and tamper APIs
-├── web/                        # Razorpay Payment Operations & Risk Console
-│   ├── index.html
-│   ├── styles.css
-│   └── app.js
-├── tests/                      # 67 Automated unit, integration, invariant, and red-team tests
-│   ├── test_ablation_5way.py
-│   ├── test_baselines.py
-│   ├── test_benchmark.py
-│   ├── test_gemini_reasoner.py
-│   ├── test_ledger.py
-│   ├── test_ledger_security.py
-│   ├── test_money_invariant.py
-│   ├── test_policy_gate.py
-│   ├── test_policy_gate_exhaustive.py
-│   ├── test_reasoner.py
-│   ├── test_red_team.py
-│   ├── test_schemas_and_validation.py
-│   ├── test_server_and_multi_event.py
-│   ├── test_simulator_independence.py
-│   └── test_state_machine.py
-├── DEMO_RUNBOOK.md             # 8-10 Minute Reviewer Demonstration Walkthrough
+│   ├── app.py                  # FastAPI server with durable PostgreSQL persistence & live APIs
+│   ├── auth.py                 # Role-Based Access Control (RBAC) & in-memory sliding window rate limiter
+│   └── middleware.py           # Correlation IDs, Security Headers & Safe Exception Handlers
+├── frontend/                   # Modern React / Vite Revenue Recovery Console (Dist mounted)
+├── tests/                      # 99 Automated unit, integration, persistence, and security regression tests
+│   ├── test_submission_regressions.py # Regressions for quiet hours UTC, idempotency & escalation
+│   ├── test_persistence.py     # Multi-threaded concurrent worker tests with PostgreSQL row locking
+│   ├── test_phase3_security.py # RBAC, rate limiting, and security header tests
+│   ├── test_policy_gate_exhaustive.py # Boundary tests for quiet hours, contact caps, PTP horizons
+│   └── test_red_team.py        # Adversarial attack vectors, prompt injection, and replay tests
+├── DEMO_RUNBOOK.md             # Reviewer Demonstration Walkthrough
 └── reports/
     ├── ablation_results.json   # Raw 6-way benchmark telemetry
     ├── gemini_eval_results.json# Live Gemini evaluation telemetry
-    ├── GEMINI_LIVE_EVAL.md     # Gemini evaluation provenance report
-    ├── FINAL_RED_TEAM_AUDIT.md # Adversarial engineering audit report
-    └── GEMINI_INTEGRATION_AUDIT.md # Initial SDK & boundary audit
+    └── GEMINI_LIVE_EVAL.md     # Gemini evaluation provenance report
 ```
 
 ---
 
-## 6. Quick Start & Execution Guide
+## 7. Quick Start & Live Execution
 
-### 1. Run Complete Automated Test Suite (67 Tests in ~5s):
+### 1. Run Complete Automated Test Suite (99 Tests in ~17s):
 ```powershell
 python -m pytest tests/ -v
 ```
 
-### 2. Run the 6-Way Benchmark & Ablation Study:
+### 2. Verify Live Server & Health:
+The service is currently running live on port 8000:
 ```powershell
-python -m benchmark.run_ablation
+Invoke-RestMethod -Uri "http://127.0.0.1:8000/api/health" -Method Get
+Invoke-RestMethod -Uri "http://127.0.0.1:8000/api/system/status" -Method Get
 ```
 
-### 3. Run Gemini Evaluation (live when quota is available; otherwise explicitly reported fallback):
-```powershell
-python -m benchmark.run_gemini_eval
-```
-
-### 4. Launch the Interactive Reviewer Console:
+### 3. Launch or Re-run the Reviewer Server:
 ```powershell
 python -m uvicorn server.app:app --host 127.0.0.1 --port 8000
 ```
-Open **[http://127.0.0.1:8000](http://127.0.0.1:8000)** in your browser and click **`⚡ RUN REVIEWER DEMO`** or follow [`DEMO_RUNBOOK.md`](file:///d:/hackathon/RazorPay/DEMO_RUNBOOK.md).
+Open **[http://127.0.0.1:8000](http://127.0.0.1:8000)** in your browser to inspect the **RazP Sentinel Console**, or test live recovery via PowerShell:
+
+```powershell
+$body = @{
+    payment_id = "pay_demo_recovery_01"
+    invoice_id = "inv_demo_01"
+    amount_inr = 2499.0
+    gateway_error_code = "BAD_REQUEST_ERROR"
+    bank_raw_response_code = "51"
+    payment_method = "UPI_AUTOPAY"
+    latency_ms = 420
+    bank_switch_degradation_score = 0.05
+    attempt_count = 1
+    inbound_message = "bhai abhi salary nahi aayi 7 tareek ko aayegi tab kat lena please"
+    channel = "WHATSAPP"
+} | ConvertTo-Json
+
+Invoke-RestMethod -Uri "http://127.0.0.1:8000/api/evaluate/single" -Method Post -Body $body -ContentType "application/json" -Headers @{"X-API-Key"="razp_op_key_demo"}
+```
+Replaying the same command immediately demonstrates **Durable Idempotency**:
+```json
+{
+  "payment_id": "pay_demo_recovery_01",
+  "status": "DUPLICATE_EVENT_SUPPRESSED",
+  "idempotent_duplicate": true,
+  "execution_result": {
+    "action_executed": "NO_OP_DUPLICATE_SUPPRESSED"
+  }
+}
+```

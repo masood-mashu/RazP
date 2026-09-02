@@ -66,10 +66,12 @@ class StateMachine:
             PaymentState.PAYMENT_FAILED,
             PaymentState.DEAD_LETTER
         },
-        # Terminal States
+        # Terminal & Escalation States
         PaymentState.RECOVERED: set(),
         PaymentState.DEAD_LETTER: set(),
-        PaymentState.ESCALATED_HUMAN_OPS: set()
+        PaymentState.ESCALATED_HUMAN_OPS: {
+            PaymentState.RECOVERED
+        }
     }
 
     ACTION_TARGET_STATE_MAP: Dict[ActionType, PaymentState] = {
@@ -94,8 +96,7 @@ class StateMachine:
     def is_terminal(self) -> bool:
         return self._current_state in (
             PaymentState.RECOVERED,
-            PaymentState.DEAD_LETTER,
-            PaymentState.ESCALATED_HUMAN_OPS
+            PaymentState.DEAD_LETTER
         )
 
     def check_and_register_event(self, event_id: str, payload_str: str) -> bool:
