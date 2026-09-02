@@ -147,7 +147,6 @@ d:/hackathon/RazorPay/RazP/
 │   ├── test_phase3_security.py # RBAC, rate limiting, and security header tests
 │   ├── test_policy_gate_exhaustive.py # Boundary tests for quiet hours, contact caps, PTP horizons
 │   └── test_red_team.py        # Adversarial attack vectors, prompt injection, and replay tests
-├── DEMO_RUNBOOK.md             # Reviewer Demonstration Walkthrough
 └── reports/
     ├── ablation_results.json   # Raw 6-way benchmark telemetry
     ├── gemini_eval_results.json# Live Gemini evaluation telemetry
