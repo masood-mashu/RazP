@@ -6,3 +6,9 @@ __pycache__/
 .venv/
 .env
 .env.*
+!.env.example
+*.log
+.pytest_cache/
+scratch/
+.DS_Store
+Thumbs.db

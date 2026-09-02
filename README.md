@@ -1,11 +1,12 @@
-# Razorpay Sentinel-Recover (Sentinel-Rx)
-### Guardrailed Neuro-Symbolic Payment Recovery Engine — Razorpay AI Builder 2026 (Track 03)
+# RazP: Autonomous Zero-Loss Payment Recovery Engine
+### Guardrailed Neuro-Symbolic Payment Recovery Engine — Razorpay AI Buildathon 2026 (Track 03)
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.136+-009688.svg)](https://fastapi.tiangolo.com)
 [![Pytest](https://img.shields.io/badge/pytest-67%20passed%20(100%25)-brightgreen.svg)](https://docs.pytest.org)
 [![Gemini](https://img.shields.io/badge/AI%20Reasoner-Gemini%20Flash--Lite%20(v1.0.0)-8E44AD.svg)](file:///d:/hackathon/RazorPay/core/gemini_reasoner.py)
 [![Audit Ledger](https://img.shields.io/badge/Audit%20Ledger-SHA--256%20Chained-success.svg)](file:///d:/hackathon/RazorPay/core/ledger.py)
+[![GitHub](https://img.shields.io/badge/GitHub-masood--mashu%2FRazP-181717.svg)](https://github.com/masood-mashu/RazP)
 
 ---
 
@@ -17,7 +18,7 @@ In Indian payment ecosystems (UPI AutoPay, Mandates, Cards), payment failures de
 
 Standard industry rule engines either spam degraded bank switches or fail to parse natural language commitments, leaving recoverable revenue on the table while triggering customer chargebacks. Unconstrained LLMs hallucinate unauthorized discounts and violate TRAI quiet hours.
 
-**Sentinel-Recover** implements a guardrailed neuro-symbolic architecture: **Gemini Flash performs unstructured semantic interpretation and proposes structured actions**, while an **authoritative deterministic spine owns money, policy, quiet hours, state transitions, idempotency, and cryptographic audit non-repudiation**.
+**RazP** implements a guardrailed neuro-symbolic architecture: **Gemini Flash performs unstructured semantic interpretation and proposes structured actions**, while an **authoritative deterministic spine owns money, policy, quiet hours, state transitions, idempotency, and cryptographic audit non-repudiation**.
 
 ---
 

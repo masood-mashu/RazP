@@ -36,8 +36,8 @@ from benchmark.dataset_generator import build_and_save_splits
 
 
 app = FastAPI(
-    title="Sentinel-Recover API",
-    description="Guardrailed Neuro-Symbolic Payment Recovery Engine for Razorpay",
+    title="RazP API",
+    description="Razorpay Autonomous Zero-Loss Payment Recovery Engine",
     version="1.0.0"
 )
 
