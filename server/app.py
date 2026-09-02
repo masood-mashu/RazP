@@ -10,7 +10,7 @@ try:
     load_dotenv()
 except ImportError:
     pass
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
@@ -387,3 +387,9 @@ if os.path.exists("web"):
     @app.get("/")
     async def serve_index():
         return FileResponse("web/index.html")
+
+
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    return Response(status_code=204)
+
