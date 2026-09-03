@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import {
   Search,
-  SlidersHorizontal,
   RefreshCw,
-  ChevronRight,
-  AlertCircle,
-  CheckCircle2
+  ArrowUpRight,
+  AlertCircle
 } from 'lucide-react';
 import { api } from '../api/client';
 import type { PaymentCase } from '../api/types';
@@ -14,6 +12,15 @@ import { StatusBadge } from '../components/StatusBadge';
 interface RecoveryQueueProps {
   onSelectCase: (paymentId: string) => void;
 }
+
+const FILTER_TABS = [
+  { id: 'ALL', label: 'All Cases' },
+  { id: 'AWAITING_CUSTOMER_ACTION', label: 'Needs Action' },
+  { id: 'PTP_SCHEDULED', label: 'PTP Scheduled' },
+  { id: 'PAUSE_RECON_VERIFY', label: 'Recon Lock' },
+  { id: 'RECOVERED', label: 'Recovered' },
+  { id: 'ESCALATED_HUMAN_OPS', label: 'Escalations' },
+];
 
 export const RecoveryQueue: React.FC<RecoveryQueueProps> = ({ onSelectCase }) => {
   const [cases, setCases] = useState<PaymentCase[]>([]);
@@ -75,17 +82,18 @@ export const RecoveryQueue: React.FC<RecoveryQueueProps> = ({ onSelectCase }) =>
   };
 
   return (
-    <div className="p-5 lg:p-7 space-y-5 overflow-y-auto h-full revive-scroll">
-      {/* Page Heading */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pb-2 border-b border-border/60">
+    <div className="p-5 lg:p-7 space-y-5 overflow-y-auto h-full revive-scroll bg-[#070B14]">
+      {/* Page Header */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-2 border-b border-border">
         <div>
-          <p className="eyebrow">Recovery operations</p>
-          <h1 className="page-title">Recovery queue</h1>
+          <span className="eyebrow text-[#0C83FF]">Workflow Management</span>
+          <h1 className="page-title text-2xl font-bold text-white tracking-tight">Recovery Queue</h1>
           <p className="mt-1 text-xs text-muted-foreground">
-            A ranked worklist of autopay failures. Every row carries sufficient context to make decisions without opening separate reports.
+            Ranked worklist of failed Autopay mandates. Select any transaction to trigger live Gemini reasoning, audit trail, and policy gate checks.
           </p>
         </div>
-        <div className="flex items-center gap-2 shrink-0">
+
+        <div className="flex items-center gap-2.5 shrink-0">
           <button
             onClick={fetchCases}
             disabled={loading}
@@ -93,169 +101,151 @@ export const RecoveryQueue: React.FC<RecoveryQueueProps> = ({ onSelectCase }) =>
             data-testid="button-refresh-queue"
           >
             <RefreshCw size={13} className={loading ? 'animate-spin' : ''} />
-            <span>Refresh queue</span>
+            <span>Refresh Queue</span>
           </button>
         </div>
       </div>
 
-      {/* Main Table Panel */}
-      <div className="panel p-0 overflow-hidden">
-        {/* Toolbar */}
-        <div className="queue-toolbar">
-          <form onSubmit={handleSearchSubmit} className="search-box">
-            <Search size={15} className="text-muted-foreground shrink-0" />
+      {/* Filter Chips & Search Bar */}
+      <div className="panel p-3.5 space-y-3">
+        {/* Status Filter Tabs */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 revive-scroll">
+          {FILTER_TABS.map((tab) => {
+            const isSelected = statusFilter === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setStatusFilter(tab.id)}
+                className={`px-3 py-1.5 rounded-md text-xs font-semibold whitespace-nowrap transition-all ${
+                  isSelected
+                    ? 'bg-[#0C83FF] text-white shadow-sm'
+                    : 'bg-[#080D1A] text-muted-foreground hover:text-white hover:bg-secondary border border-border/80'
+                }`}
+              >
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Search & Sort Controls */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 border-t border-border/60">
+          <form onSubmit={handleSearchSubmit} className="search-box w-full sm:w-auto">
+            <Search size={14} className="text-muted-foreground" />
             <input
               type="text"
-              placeholder="Search payment ID, invoice, or gateway code..."
+              placeholder="Search payment ID or invoice..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              data-testid="input-search-cases"
+              className="text-xs"
+              data-testid="input-search-queue"
             />
+            {searchTerm && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchTerm('');
+                  fetchCases();
+                }}
+                className="text-[10px] text-muted-foreground hover:text-white"
+              >
+                Clear
+              </button>
+            )}
           </form>
 
-          <div className="queue-actions">
-            {/* Status Filter */}
+          <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground w-full sm:w-auto justify-end">
+            <span>Sort by:</span>
             <div className="select-wrap">
-              <SlidersHorizontal size={13} className="text-muted-foreground shrink-0" />
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                data-testid="select-case-status"
-              >
-                <option value="ALL">All statuses</option>
-                <option value="PAYMENT_FAILED">Payment failed</option>
-                <option value="PAUSE_RECON_VERIFY">Recon verify</option>
-                <option value="PTP_SCHEDULED">PTP scheduled</option>
-                <option value="RETRY_SCHEDULED">Retry queued</option>
-                <option value="RECOVERED">Recovered</option>
-                <option value="ESCALATED_HUMAN_OPS">Escalated</option>
-                <option value="DEAD_LETTER">Stopped</option>
-              </select>
-            </div>
-
-            {/* Rank Sort */}
-            <div className="select-wrap hidden sm:flex">
-              <span className="text-[10px] text-muted-foreground">Rank</span>
               <select
                 value={sortField}
                 onChange={(e) => setSortField(e.target.value as any)}
-                data-testid="select-case-sort"
+                data-testid="select-sort-queue"
               >
-                <option value="updated_at">Last updated</option>
-                <option value="amount">Amount at risk</option>
-                <option value="attempts">Attempt count</option>
+                <option value="updated_at">Last Updated</option>
+                <option value="amount">Amount (High &rarr; Low)</option>
+                <option value="attempts">Attempts</option>
               </select>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Queue Metadata Line */}
-        <div className="queue-meta">
-          <span>{loading ? 'Loading queue from PostgreSQL…' : `${sortedCases.length} cases in view`}</span>
-          <div className="queue-meta-right">
-            <span className="legend-dot legend-dot-copper" />
-            <span>Needs decision</span>
-            <span className="legend-dot legend-dot-green" />
-            <span>Active recovery</span>
-          </div>
-        </div>
-
-        {/* Error or Empty State or Table */}
+      {/* Cases Table */}
+      <div className="panel p-0 overflow-hidden">
         {loading && cases.length === 0 ? (
-          <div className="p-6 space-y-2">
-            <div className="skeleton-row" />
-            <div className="skeleton-row" />
-            <div className="skeleton-row" />
-            <div className="skeleton-row" />
+          <div className="p-8 text-center text-xs text-muted-foreground">
+            <RefreshCw size={18} className="animate-spin text-[#0C83FF] mx-auto mb-2" />
+            <span>Loading recovery queue from PostgreSQL...</span>
           </div>
         ) : error ? (
-          <div className="empty-state py-8">
-            <AlertCircle size={22} className="text-destructive" />
-            <p className="mt-2 text-xs font-bold">Failed to load queue</p>
-            <p className="text-[11px] text-muted-foreground">{error}</p>
-            <button onClick={fetchCases} className="revive-button revive-button-outline text-xs mt-3">
-              <RefreshCw size={13} /> Retry
-            </button>
+          <div className="p-8 text-center text-xs text-rose-400">
+            <AlertCircle size={18} className="mx-auto mb-2 text-rose-400" />
+            <span>{error}</span>
           </div>
         ) : sortedCases.length === 0 ? (
-          <div className="empty-state py-12">
-            <CheckCircle2 size={24} className="text-primary" />
-            <p className="mt-3 text-sm font-bold">Clear for now</p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              {searchTerm ? 'No cases match your search term.' : 'No recovery cases found matching active filter.'}
-            </p>
+          <div className="p-12 text-center text-xs text-muted-foreground space-y-2">
+            <p className="font-semibold text-white">No recovery cases found.</p>
+            <p>Try clearing your search or filter parameters.</p>
           </div>
         ) : (
-          <div className="table-scroll revive-scroll">
+          <div className="table-scroll">
             <table className="data-table">
               <thead>
                 <tr>
-                  <th>Case / Payment</th>
-                  <th>Amount at risk</th>
-                  <th>Payment method</th>
-                  <th>Attempts</th>
-                  <th>Last updated</th>
+                  <th>Payment ID</th>
+                  <th>Invoice ID</th>
+                  <th>Amount</th>
                   <th>Status</th>
+                  <th>Attempts</th>
+                  <th>Last Updated</th>
                   <th className="text-right">Action</th>
                 </tr>
               </thead>
               <tbody>
-                {sortedCases.map((item) => (
+                {sortedCases.map((c) => (
                   <tr
-                    key={item.payment_id}
-                    className="data-row cursor-pointer"
-                    onClick={() => onSelectCase(item.payment_id)}
-                    data-testid={`row-case-${item.payment_id}`}
+                    key={c.payment_id}
+                    onClick={() => onSelectCase(c.payment_id)}
+                    className="data-row"
+                    data-testid={`row-case-${c.payment_id}`}
                   >
                     <td>
-                      <div className="flex items-center gap-3">
-                        <div className="avatar">
-                          {item.payment_id.slice(-2).toUpperCase()}
-                        </div>
-                        <div className="min-w-0">
-                          <p className="text-xs font-bold text-foreground font-mono">
-                            {item.payment_id}
-                          </p>
-                          <p className="text-[10px] text-muted-foreground font-mono">
-                            {item.invoice_id}
-                          </p>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <span className="mono-number text-xs font-semibold text-foreground">
-                        {formatCurrency(item.amount_inr)}
+                      <span className="font-mono font-bold text-white text-xs hover:text-[#0C83FF] transition-colors">
+                        {c.payment_id}
                       </span>
                     </td>
                     <td>
-                      <span className="action-badge">
-                        {item.payment_method || 'UPI_AUTOPAY'}
+                      <span className="font-mono text-muted-foreground text-xs">{c.invoice_id}</span>
+                    </td>
+                    <td>
+                      <span className="mono-number font-bold text-white text-xs">
+                        {formatCurrency(c.amount_inr)}
                       </span>
                     </td>
                     <td>
-                      <span className="text-xs font-mono text-muted-foreground">
-                        {item.attempt_count} / 3
+                      <StatusBadge state={c.current_state} size="sm" />
+                    </td>
+                    <td>
+                      <span className="font-mono text-muted-foreground text-xs">
+                        {c.attempt_count}
                       </span>
                     </td>
                     <td>
-                      <span className="text-[11px] font-mono text-muted-foreground">
-                        {formatDate(item.updated_at)}
+                      <span className="font-mono text-muted-foreground text-xs">
+                        {formatDate(c.updated_at)}
                       </span>
-                    </td>
-                    <td>
-                      <StatusBadge state={item.current_state} size="sm" />
                     </td>
                     <td className="text-right">
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          onSelectCase(item.payment_id);
+                          onSelectCase(c.payment_id);
                         }}
-                        className="revive-button revive-button-quiet text-xs"
-                        title="Open in Case Workspace"
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#0C83FF]/15 hover:bg-[#0C83FF]/30 text-[#0C83FF] text-[11px] font-semibold transition-all border border-[#0C83FF]/30"
                       >
-                        <span>Inspect</span>
-                        <ChevronRight size={13} />
+                        <span>Workspace</span>
+                        <ArrowUpRight size={12} />
                       </button>
                     </td>
                   </tr>
@@ -264,6 +254,11 @@ export const RecoveryQueue: React.FC<RecoveryQueueProps> = ({ onSelectCase }) =>
             </table>
           </div>
         )}
+
+        <div className="p-3 border-t border-border bg-[#080D1A] flex items-center justify-between text-xs text-muted-foreground font-mono">
+          <span>Showing {sortedCases.length} case{sortedCases.length === 1 ? '' : 's'}</span>
+          <span>PostgreSQL Active Persistence</span>
+        </div>
       </div>
     </div>
   );

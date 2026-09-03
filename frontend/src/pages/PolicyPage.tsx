@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import {
-  SlidersHorizontal,
   Lock,
   Save,
   RefreshCw,
   AlertTriangle,
   Clock,
-  CheckCircle2
+  CheckCircle2,
+  ShieldCheck
 } from 'lucide-react';
 import { api } from '../api/client';
 
@@ -73,17 +73,22 @@ export const PolicyPage: React.FC = () => {
   };
 
   return (
-    <div className="p-5 lg:p-7 space-y-5 overflow-y-auto h-full revive-scroll">
+    <div className="p-5 lg:p-7 space-y-6 overflow-y-auto h-full revive-scroll bg-[#070B14]">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pb-2 border-b border-border/60">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-2 border-b border-border">
         <div>
-          <p className="eyebrow">Deterministic Policy & Compliance Gate</p>
-          <h1 className="page-title">Recovery policy</h1>
+          <div className="flex items-center gap-2">
+            <span className="eyebrow text-[#0C83FF]">Deterministic Policy &amp; Compliance Gate</span>
+            <span className="text-muted-foreground text-xs">·</span>
+            <span className="text-[11px] text-muted-foreground font-mono">TRAI Compliance & Safety</span>
+          </div>
+          <h1 className="page-title text-2xl font-bold text-white tracking-tight">Recovery Policy Engine</h1>
           <p className="mt-1 text-xs text-muted-foreground">
-            Tune operating boundaries and statutory compliance rules enforced deterministically on every recovery mutation.
+            Configure merchant recovery thresholds and inspect statutory constraints enforced deterministically on every state transition.
           </p>
         </div>
-        <div className="flex items-center gap-2 shrink-0">
+
+        <div className="flex items-center gap-2.5 shrink-0">
           <button
             onClick={fetchPolicy}
             disabled={loading}
@@ -91,154 +96,200 @@ export const PolicyPage: React.FC = () => {
             data-testid="button-refresh-policy"
           >
             <RefreshCw size={13} className={loading ? 'animate-spin' : ''} />
-            <span>Refresh policy</span>
+            <span>Refresh</span>
           </button>
         </div>
       </div>
 
       {successMessage && (
-        <div className="p-3.5 rounded border border-primary/40 bg-primary/10 text-primary text-xs flex items-center gap-2">
-          <CheckCircle2 size={15} className="shrink-0" />
+        <div className="p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs flex items-center gap-2.5">
+          <CheckCircle2 size={16} />
           <span>{successMessage}</span>
         </div>
       )}
 
       {error && (
-        <div className="p-3.5 rounded border border-destructive/40 bg-destructive/10 text-destructive text-xs flex items-center gap-2">
-          <AlertTriangle size={15} className="shrink-0" />
+        <div className="p-4 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs flex items-center gap-2.5">
+          <AlertTriangle size={16} />
           <span>{error}</span>
         </div>
       )}
 
-      {/* Main 2-Column Split */}
-      <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-4">
-        {/* Left Form: Configurable Merchant Policy */}
-        <div className="panel space-y-4">
-          <div className="flex items-center justify-between border-b border-border/70 pb-3">
-            <div>
-              <p className="eyebrow">Merchant Configurable Parameters</p>
-              <h2 className="section-title text-sm">Policy parameters</h2>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Left Column: Statutory Invariants (Non-negotiable regulations) (5 cols) */}
+        <div className="lg:col-span-5 space-y-5">
+          <div className="panel space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-border">
+              <div className="flex items-center gap-2">
+                <Lock size={15} className="text-[#10B981]" />
+                <h2 className="section-title text-sm font-semibold text-white">
+                  Statutory Invariants (Hardcoded Law)
+                </h2>
+              </div>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/15 text-[#10B981] font-semibold border border-emerald-500/25">
+                IMMUTABLE
+              </span>
             </div>
-            <SlidersHorizontal size={15} className="text-muted-foreground" />
+
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              These constraints are enforced in the deterministic spine and cannot be overridden by merchant policy or LLM proposals:
+            </p>
+
+            <div className="space-y-3 pt-1">
+              <div className="p-3 rounded-lg bg-[#080D1A] border border-border space-y-1">
+                <div className="flex items-center justify-between text-xs font-semibold text-white">
+                  <span className="flex items-center gap-2">
+                    <Clock size={13} className="text-[#F59E0B]" />
+                    <span>TRAI Quiet Hours (21:00–09:00 IST)</span>
+                  </span>
+                  <span className="text-[10px] font-mono text-[#10B981]">ENFORCED</span>
+                </div>
+                <p className="text-[11px] text-muted-foreground leading-relaxed">
+                  Indian Telecom Regulatory Authority mandates no commercial communication between 9 PM and 9 AM. Timezone conversion normalizes UTC into IST.
+                </p>
+              </div>
+
+              <div className="p-3 rounded-lg bg-[#080D1A] border border-border space-y-1">
+                <div className="flex items-center justify-between text-xs font-semibold text-white">
+                  <span className="flex items-center gap-2">
+                    <ShieldCheck size={13} className="text-[#0C83FF]" />
+                    <span>Zero AI Financial Authority</span>
+                  </span>
+                  <span className="text-[10px] font-mono text-[#10B981]">ENFORCED</span>
+                </div>
+                <p className="text-[11px] text-muted-foreground leading-relaxed">
+                  AI models cannot grant unauthorized discounts, alter invoice amounts, or execute balance refunds without deterministic merchant approval.
+                </p>
+              </div>
+
+              <div className="p-3 rounded-lg bg-[#080D1A] border border-border space-y-1">
+                <div className="flex items-center justify-between text-xs font-semibold text-white">
+                  <span className="flex items-center gap-2">
+                    <Lock size={13} className="text-[#8B5CF6]" />
+                    <span>Debit Claim Reconciliation Lock</span>
+                  </span>
+                  <span className="text-[10px] font-mono text-[#10B981]">ENFORCED</span>
+                </div>
+                <p className="text-[11px] text-muted-foreground leading-relaxed">
+                  If a customer reports an account debit, all retries freeze in <code>PAUSE_RECON_VERIFY</code> until authoritative bank settlement reconciliation.
+                </p>
+              </div>
+            </div>
           </div>
+        </div>
 
-          <form onSubmit={handleSavePolicy} className="space-y-4 text-xs">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {/* Right Column: Configurable Policy Form (7 cols) */}
+        <div className="lg:col-span-7 space-y-5">
+          <form onSubmit={handleSavePolicy} className="panel space-y-5">
+            <div className="flex items-center justify-between pb-3 border-b border-border">
               <div>
-                <label className="block text-[10px] font-bold text-muted-foreground uppercase mb-1">
-                  Max Contact Attempts
-                </label>
-                <div className="flex items-center gap-2 bg-background border border-border rounded px-2.5 py-1.5 focus-within:border-primary">
-                  <input
-                    type="number"
-                    min="1"
-                    max="5"
-                    value={maxAttempts}
-                    onChange={(e) => setMaxAttempts(Number(e.target.value))}
-                    required
-                    className="w-full bg-transparent font-mono text-xs text-foreground focus:outline-none"
-                    data-testid="input-max-attempts"
-                  />
-                  <span className="text-[10px] text-muted-foreground font-mono">attempts</span>
-                </div>
+                <h2 className="section-title text-sm font-semibold text-white">
+                  Merchant Configurable Parameters
+                </h2>
+                <p className="text-xs text-muted-foreground">
+                  Active policy record persisted in PostgreSQL and checked on every recovery step.
+                </p>
               </div>
-
-              <div>
-                <label className="block text-[10px] font-bold text-muted-foreground uppercase mb-1">
-                  Max PTP Horizon
-                </label>
-                <div className="flex items-center gap-2 bg-background border border-border rounded px-2.5 py-1.5 focus-within:border-primary">
-                  <input
-                    type="number"
-                    min="1"
-                    max="30"
-                    value={maxPtpDays}
-                    onChange={(e) => setMaxPtpDays(Number(e.target.value))}
-                    required
-                    className="w-full bg-transparent font-mono text-xs text-foreground focus:outline-none"
-                    data-testid="input-max-ptp-days"
-                  />
-                  <span className="text-[10px] text-muted-foreground font-mono">days</span>
-                </div>
-              </div>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-500/15 text-[#0C83FF] font-semibold border border-blue-500/25">
+                rzp_merchant_prod
+              </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label className="block text-[10px] font-bold text-muted-foreground uppercase mb-1">
-                  TRAI Quiet Hours Start (21:00 - 09:00)
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+              <div className="space-y-1.5">
+                <label className="text-muted-foreground font-mono text-[11px] block">
+                  Quiet Hours Start (IST)
                 </label>
-                <div className="flex items-center gap-2 bg-background border border-border rounded px-2.5 py-1.5 focus-within:border-primary">
-                  <Clock size={13} className="text-muted-foreground shrink-0" />
-                  <input
-                    type="time"
-                    value={quietHoursStart}
-                    onChange={(e) => setQuietHoursStart(e.target.value)}
-                    required
-                    className="w-full bg-transparent font-mono text-xs text-foreground focus:outline-none"
-                    data-testid="input-quiet-hours-start"
-                  />
-                </div>
+                <input
+                  type="text"
+                  value={quietHoursStart}
+                  onChange={(e) => setQuietHoursStart(e.target.value)}
+                  placeholder="21:00"
+                  className="w-full px-3 py-2 rounded-md bg-[#080D1A] border border-border text-white font-mono text-xs focus:border-[#0C83FF] outline-none"
+                  data-testid="input-quiet-hours-start"
+                />
               </div>
 
-              <div>
-                <label className="block text-[10px] font-bold text-muted-foreground uppercase mb-1">
-                  TRAI Quiet Hours End
+              <div className="space-y-1.5">
+                <label className="text-muted-foreground font-mono text-[11px] block">
+                  Quiet Hours End (IST)
                 </label>
-                <div className="flex items-center gap-2 bg-background border border-border rounded px-2.5 py-1.5 focus-within:border-primary">
-                  <Clock size={13} className="text-muted-foreground shrink-0" />
-                  <input
-                    type="time"
-                    value={quietHoursEnd}
-                    onChange={(e) => setQuietHoursEnd(e.target.value)}
-                    required
-                    className="w-full bg-transparent font-mono text-xs text-foreground focus:outline-none"
-                    data-testid="input-quiet-hours-end"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label className="block text-[10px] font-bold text-muted-foreground uppercase mb-1">
-                  Bank Circuit Breaker
-                </label>
-                <div className="flex items-center gap-2 bg-background border border-border rounded px-2.5 py-1.5 focus-within:border-primary">
-                  <input
-                    type="number"
-                    step="0.05"
-                    min="0.1"
-                    max="0.9"
-                    value={circuitBreakerThreshold}
-                    onChange={(e) => setCircuitBreakerThreshold(Number(e.target.value))}
-                    required
-                    className="w-full bg-transparent font-mono text-xs text-foreground focus:outline-none"
-                  />
-                  <span className="text-[10px] text-muted-foreground font-mono">failure rate</span>
-                </div>
+                <input
+                  type="text"
+                  value={quietHoursEnd}
+                  onChange={(e) => setQuietHoursEnd(e.target.value)}
+                  placeholder="09:00"
+                  className="w-full px-3 py-2 rounded-md bg-[#080D1A] border border-border text-white font-mono text-xs focus:border-[#0C83FF] outline-none"
+                  data-testid="input-quiet-hours-end"
+                />
               </div>
 
-              <div>
-                <label className="block text-[10px] font-bold text-muted-foreground uppercase mb-1">
-                  Settlement Discounts
+              <div className="space-y-1.5">
+                <label className="text-muted-foreground font-mono text-[11px] block">
+                  Max Contact Attempts (Ceiling &le; 3)
                 </label>
-                <div className="flex items-center justify-between bg-background border border-border rounded px-2.5 py-1.5">
-                  <span className="text-[11px] text-muted-foreground">Allow AI discounts</span>
+                <input
+                  type="number"
+                  min="1"
+                  max="5"
+                  value={maxAttempts}
+                  onChange={(e) => setMaxAttempts(parseInt(e.target.value) || 3)}
+                  className="w-full px-3 py-2 rounded-md bg-[#080D1A] border border-border text-white font-mono text-xs focus:border-[#0C83FF] outline-none"
+                  data-testid="input-max-attempts"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-muted-foreground font-mono text-[11px] block">
+                  Max PTP Horizon (Days &le; 14)
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  max="30"
+                  value={maxPtpDays}
+                  onChange={(e) => setMaxPtpDays(parseInt(e.target.value) || 14)}
+                  className="w-full px-3 py-2 rounded-md bg-[#080D1A] border border-border text-white font-mono text-xs focus:border-[#0C83FF] outline-none"
+                  data-testid="input-max-ptp-days"
+                />
+              </div>
+
+              <div className="space-y-1.5 sm:col-span-2">
+                <label className="text-muted-foreground font-mono text-[11px] block">
+                  Bank Switch Circuit Breaker Threshold (Degradation Score: 0.0 &ndash; 1.0)
+                </label>
+                <input
+                  type="number"
+                  step="0.05"
+                  min="0.1"
+                  max="0.95"
+                  value={circuitBreakerThreshold}
+                  onChange={(e) => setCircuitBreakerThreshold(parseFloat(e.target.value) || 0.65)}
+                  className="w-full px-3 py-2 rounded-md bg-[#080D1A] border border-border text-white font-mono text-xs focus:border-[#0C83FF] outline-none"
+                  data-testid="input-circuit-breaker-threshold"
+                />
+                <p className="text-[10px] text-muted-foreground font-mono">
+                  If bank switch failure rate exceeds this score, automatic bank retries are rejected to prevent customer friction.
+                </p>
+              </div>
+
+              <div className="space-y-1.5 sm:col-span-2 pt-2 border-t border-border">
+                <label className="flex items-center gap-2.5 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={allowDiscounts}
                     onChange={(e) => setAllowDiscounts(e.target.checked)}
-                    className="w-4 h-4 rounded text-primary focus:ring-primary border-border bg-secondary"
+                    className="rounded bg-[#080D1A] border-border text-[#0C83FF] focus:ring-0 w-4 h-4"
+                    data-testid="checkbox-allow-discounts"
                   />
-                </div>
+                  <span className="text-xs text-white font-medium">
+                    Allow Merchant Discount Authorization (Strict 0% by default)
+                  </span>
+                </label>
               </div>
             </div>
 
-            <div className="pt-3 border-t border-border/70 flex items-center justify-between">
-              <span className="text-[10px] text-muted-foreground font-mono">
-                Persists to table: merchant_policies
-              </span>
+            <div className="pt-3 border-t border-border flex items-center justify-end">
               <button
                 type="submit"
                 disabled={saving}
@@ -246,83 +297,10 @@ export const PolicyPage: React.FC = () => {
                 data-testid="button-save-policy"
               >
                 <Save size={13} className={saving ? 'animate-spin' : ''} />
-                <span>{saving ? 'Saving policy...' : 'Save as active policy'}</span>
+                <span>{saving ? 'Saving to PostgreSQL...' : 'Save & Persist Policy'}</span>
               </button>
             </div>
           </form>
-        </div>
-
-        {/* Right Panel: Live Guardrail State & Statutory Regulations */}
-        <div className="space-y-4">
-          {/* Active Policy Summary */}
-          <div className="panel panel-quiet space-y-3">
-            <div className="flex items-center justify-between border-b border-border/70 pb-2.5">
-              <div>
-                <p className="eyebrow">Active policy</p>
-                <h3 className="section-title text-sm">Live guardrail set</h3>
-              </div>
-              <span className="policy-id">LIVE</span>
-            </div>
-
-            <div className="space-y-1 divide-y divide-border/60 text-xs">
-              <div className="data-pair">
-                <span>Merchant ID</span>
-                <strong className="font-mono">rzp_merchant_prod</strong>
-              </div>
-              <div className="data-pair">
-                <span>Max Retries</span>
-                <strong className="font-mono">{maxAttempts} attempts</strong>
-              </div>
-              <div className="data-pair">
-                <span>Quiet Hours Window</span>
-                <strong className="font-mono">{quietHoursStart} &ndash; {quietHoursEnd} IST</strong>
-              </div>
-              <div className="data-pair">
-                <span>PTP Extension Limit</span>
-                <strong className="font-mono">{maxPtpDays} days</strong>
-              </div>
-              <div className="data-pair">
-                <span>Discount Authority</span>
-                <strong className={allowDiscounts ? 'text-accent' : 'text-primary'}>
-                  {allowDiscounts ? 'ENABLED' : 'DISABLED (0% DISCOUNT)'}
-                </strong>
-              </div>
-            </div>
-          </div>
-
-          {/* Statutory Regulatory Boundaries */}
-          <div className="panel panel-dark space-y-3">
-            <div className="flex items-center justify-between border-b border-sidebar-border/80 pb-2.5">
-              <div>
-                <p className="eyebrow eyebrow-dark">Compliance rules</p>
-                <h3 className="section-title section-title-dark text-sm">TRAI Quiet Hours & Statutory boundaries</h3>
-              </div>
-              <Lock size={15} className="text-sidebar-primary" />
-            </div>
-
-            <div className="space-y-2 text-[11px] text-sidebar-foreground/80">
-              <div className="p-2 rounded bg-sidebar-accent/50 border border-sidebar-border space-y-0.5">
-                <span className="font-bold text-sidebar-foreground">TRAI Telecom Regulations</span>
-                <p className="text-sidebar-foreground/60 text-[10px]">
-                  Commercial communications between 21:00 and 09:00 IST are strictly prohibited. The policy gate strips outbound messaging during quiet hours.
-                </p>
-              </div>
-
-              <div className="p-2 rounded bg-sidebar-accent/50 border border-sidebar-border space-y-0.5">
-                <span className="font-bold text-sidebar-foreground">RBI Fair Practice Code</span>
-                <p className="text-sidebar-foreground/60 text-[10px]">
-                  Customer harassment prevention caps contact frequency. Cases exceeding contact ceiling escalate to human ops.
-                </p>
-              </div>
-
-              <div className="p-2 rounded bg-sidebar-accent/50 border border-sidebar-border space-y-0.5">
-                <span className="font-bold text-sidebar-foreground">Zero-Discounts Financial Invariant</span>
-                <p className="text-sidebar-foreground/60 text-[10px]">
-                  AI reasoners have zero authority to alter payable principal or waive fees.
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>

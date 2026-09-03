@@ -32,9 +32,15 @@ export const App: React.FC = () => {
       case 'queue':
         return <RecoveryQueue onSelectCase={handleSelectCase} />;
       case 'workspace':
-        return <CaseWorkspace initialPaymentId={activePaymentId} onClearCase={() => setActivePaymentId(null)} />;
+        return (
+          <CaseWorkspace
+            initialPaymentId={activePaymentId}
+            onClearCase={() => setActivePaymentId(null)}
+            onNavigateToLedger={() => setCurrentTab('ledger')}
+          />
+        );
       case 'ledger':
-        return <AuditLedgerPage />;
+        return <AuditLedgerPage onSelectCase={handleSelectCase} />;
       case 'policy':
         return <PolicyPage />;
       case 'benchmark':
@@ -45,7 +51,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="h-screen w-screen flex flex-col bg-background text-foreground overflow-hidden revive-noise">
+    <div className="h-screen w-screen flex flex-col bg-[#070B14] text-foreground overflow-hidden">
       <Header
         onRefresh={handleGlobalRefresh}
         isRefreshing={isRefreshing}
@@ -61,11 +67,11 @@ export const App: React.FC = () => {
         />
         {mobileSidebarOpen && (
           <div
-            className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
             onClick={() => setMobileSidebarOpen(false)}
           />
         )}
-        <main className="flex-1 overflow-hidden bg-background">
+        <main className="flex-1 overflow-hidden bg-[#070B14]">
           {renderContent()}
         </main>
       </div>

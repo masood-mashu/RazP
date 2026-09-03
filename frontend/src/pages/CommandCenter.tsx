@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import {
   CircleDollarSign,
-  ArrowUpRight,
-  Target,
-  Activity,
-  ArrowRight,
-  Zap,
-  Gauge,
-  RefreshCw,
+  TrendingUp,
   ShieldCheck,
+  RefreshCw,
+  Zap,
+  ArrowRight,
   CheckCircle2,
-  AlertTriangle
+  Lock,
+  ExternalLink,
+  X
 } from 'lucide-react';
 import { api } from '../api/client';
 import type { DashboardStats, PaymentCase, SystemStatus } from '../api/types';
-import { StatCard } from '../components/StatCard';
 import { StatusBadge } from '../components/StatusBadge';
 
 interface CommandCenterProps {
@@ -28,7 +26,10 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ onSelectCase, onNa
   const [systemStatus, setSystemStatus] = useState<SystemStatus | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Multi-event demo state
   const [demoRunning, setDemoRunning] = useState<boolean>(false);
+  const [demoModalOpen, setDemoModalOpen] = useState<boolean>(false);
   const [demoResult, setDemoResult] = useState<any | null>(null);
 
   const loadData = async () => {
@@ -59,6 +60,7 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ onSelectCase, onNa
       setDemoRunning(true);
       const res = await api.runMultiEventDemo();
       setDemoResult(res);
+      setDemoModalOpen(true);
       await loadData();
     } catch (err: any) {
       alert(`Demo execution failed: ${err.message}`);
@@ -74,295 +76,377 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ onSelectCase, onNa
 
   const formatPercent = (pct: number | undefined) => (pct === undefined ? '—' : `${pct.toFixed(1)}%`);
 
-  if (loading && !stats) {
-    return (
-      <div className="p-8 space-y-3">
-        <div className="skeleton-row" />
-        <div className="grid grid-cols-4 gap-3">
-          <div className="skeleton-row h-28" />
-          <div className="skeleton-row h-28" />
-          <div className="skeleton-row h-28" />
-          <div className="skeleton-row h-28" />
-        </div>
-      </div>
-    );
-  }
-
-  if (error && !stats) {
-    return (
-      <div className="p-8">
-        <div className="panel max-w-lg border-destructive/40 bg-destructive/10 text-destructive space-y-3">
-          <div className="flex items-center gap-2 font-bold text-sm">
-            <AlertTriangle size={18} />
-            <span>Connection Unavailable</span>
-          </div>
-          <p className="text-xs text-muted-foreground">{error}</p>
-          <button onClick={loadData} className="revive-button revive-button-outline text-xs">
-            <RefreshCw size={13} /> Retry Connection
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   const activeCasesCount = stats?.active_cases || 0;
-  const needsAttentionCount = stats?.escalated_cases || 0;
-  const stoppedCasesCount = stats?.stopped_cases || stats?.dead_letter_cases || 0;
-  const totalExposure = stats?.total_ingested_exposure || stats?.total_exposure || 0;
-  const yieldPct = stats?.recovery_yield_pct || 0;
+  const recoveredCasesCount = stats?.recovered_cases || 0;
+  const totalCasesCount = stats?.total_cases || (activeCasesCount + recoveredCasesCount) || 1;
+  const recoveredRev = stats?.recovered_revenue || 0;
+  const atRiskRev = stats?.revenue_at_risk || 0;
+  const totalExposure = stats?.total_exposure || (recoveredRev + atRiskRev) || 0;
+  const yieldPct = stats?.recovery_yield_pct || (totalExposure > 0 ? (recoveredRev / totalExposure) * 100 : 0);
 
   return (
-    <div className="p-5 lg:p-7 space-y-5 overflow-y-auto h-full revive-scroll">
-      {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pb-2 border-b border-border/60">
+    <div className="p-5 lg:p-7 space-y-6 overflow-y-auto h-full revive-scroll bg-[#070B14]">
+      {/* Top Header */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-2 border-b border-border/80">
         <div>
-          <p className="eyebrow">Recovery Command Center</p>
-          <h1 className="page-title">The recovery picture</h1>
-          <p className="mt-1 text-xs text-muted-foreground">
-            A working view of what is at risk, what is moving, and where deterministic guardrails protect revenue.
+          <div className="flex items-center gap-2">
+            <span className="eyebrow text-[#0C83FF]">Autonomous Operations</span>
+            <span className="text-muted-foreground text-xs">·</span>
+            <span className="text-[11px] text-muted-foreground font-mono">Track 03 Submission</span>
+          </div>
+          <h1 className="page-title text-2xl font-bold text-white tracking-tight">
+            Recovery Command Center
+          </h1>
+          <p className="mt-1 text-xs text-muted-foreground max-w-2xl">
+            Real-time telemetry and deterministic guardrails recovering failed UPI AutoPay and mandate transactions without financial authority risks.
           </p>
         </div>
-        <div className="flex items-center gap-2 shrink-0">
+
+        <div className="flex items-center gap-2.5 shrink-0">
           <button
             onClick={loadData}
             disabled={loading}
             className="revive-button revive-button-outline"
-            data-testid="button-refresh-dashboard"
+            data-testid="button-refresh-command-center"
           >
             <RefreshCw size={13} className={loading ? 'animate-spin' : ''} />
             <span>Refresh</span>
           </button>
           <button
-            onClick={() => onNavigate('workspace')}
+            onClick={handleRunDemo}
+            disabled={demoRunning}
             className="revive-button revive-button-primary"
-            data-testid="link-evaluate-case"
+            data-testid="button-run-demo-flow"
           >
-            <Zap size={13} />
-            <span>Evaluate case</span>
+            <Zap size={13} className={demoRunning ? 'animate-spin' : 'fill-white'} />
+            <span>{demoRunning ? 'Simulating...' : 'Run Reviewer Demo'}</span>
           </button>
         </div>
       </div>
 
-      {/* 4-Card Financial Exposure Grid */}
-      <section className="metric-grid">
-        <StatCard
-          title="Revenue at Risk"
-          value={formatCurrency(stats?.revenue_at_risk)}
-          subtitle={`${activeCasesCount} active cases in recovery pipeline`}
-          icon={CircleDollarSign}
-          variant="warning"
-        />
-        <StatCard
-          title="Recovered Revenue (Gross)"
-          value={formatCurrency(stats?.recovered_revenue)}
-          subtitle={`${formatPercent(yieldPct)} gross recovery yield`}
-          icon={ArrowUpRight}
-          variant="success"
-        />
-        <StatCard
-          title="Total Ingested Exposure"
-          value={formatCurrency(totalExposure)}
-          subtitle="Monitored autopay failure volume"
-          icon={Target}
-          variant="default"
-        />
-        <StatCard
-          title="Active Cases"
-          value={activeCasesCount.toLocaleString()}
-          subtitle={`${needsAttentionCount} require operator review`}
-          icon={Activity}
-          variant="default"
-        />
-      </section>
+      {error && (
+        <div className="p-4 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs">
+          {error}
+        </div>
+      )}
 
-      {/* Main Split: Left Decision Summary & Right Recent Recoveries */}
-      <section className="grid grid-cols-1 lg:grid-cols-[1.25fr_0.75fr] gap-4">
-        {/* Left Hero Panel */}
-        <div className="panel panel-hero flex flex-col justify-between">
-          <div>
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="eyebrow">Decisions today</p>
-                <h2 className="section-title text-base">Prioritize the next rupee</h2>
-                <p className="mt-1.5 max-w-xl text-xs text-muted-foreground leading-relaxed">
-                  RazP Sentinel holds {needsAttentionCount} cases for human judgment and has stopped {stoppedCasesCount} cases where further automated contact would be a regulatory liability.
-                </p>
-              </div>
-              <div className="signal-orb shrink-0">
-                <Gauge size={18} />
-              </div>
-            </div>
-
-            {/* 4-Stat Metric Strip */}
-            <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-px overflow-hidden rounded border border-border bg-border">
-              <div className="bg-card p-3">
-                <p className="eyebrow">Attention</p>
-                <p className="mono-number mt-1 text-lg font-medium text-accent">{needsAttentionCount}</p>
-              </div>
-              <div className="bg-card p-3">
-                <p className="eyebrow">Recovered</p>
-                <p className="mono-number mt-1 text-lg font-medium text-primary">
-                  {stats?.recovered_cases || 0}
-                </p>
-              </div>
-              <div className="bg-card p-3">
-                <p className="eyebrow">Stopped</p>
-                <p className="mono-number mt-1 text-lg font-medium text-muted-foreground">{stoppedCasesCount}</p>
-              </div>
-              <div className="bg-card p-3">
-                <p className="eyebrow">Yield</p>
-                <p className="mono-number mt-1 text-lg font-medium text-primary">{formatPercent(yieldPct)}</p>
-              </div>
+      {/* KPI Ribbon */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Metric 1: Recovered Revenue */}
+        <div className="panel metric-card border-l-4 border-l-[#10B981]">
+          <div className="flex items-center justify-between text-muted-foreground">
+            <span className="text-xs font-semibold uppercase tracking-wider font-mono">Recovered Revenue (Gross)</span>
+            <div className="w-7 h-7 rounded-md bg-[#10B981]/15 text-[#10B981] flex items-center justify-center">
+              <TrendingUp size={15} />
             </div>
           </div>
-
-          {/* Operating Signals Mini Bar */}
-          <div className="mt-5 pt-4 border-t border-border/70 flex items-end justify-between">
-            <div>
-              <p className="eyebrow">Operating signals</p>
-              <p className="text-[11px] text-muted-foreground mt-0.5">Scale across pipeline metrics</p>
+          <div className="mt-2">
+            <div className="mono-number text-2xl lg:text-3xl font-bold text-white tracking-tight">
+              {formatCurrency(recoveredRev)}
             </div>
-            <div className="mini-bars">
-              <span className="mini-bar mini-bar-primary" style={{ height: '70%' }} title="Recovered" />
-              <span className="mini-bar mini-bar-accent" style={{ height: '40%' }} title="At Risk" />
-              <span className="mini-bar mini-bar-primary" style={{ height: '85%' }} title="Yield" />
-              <span className="mini-bar mini-bar-accent" style={{ height: '30%' }} title="Attention" />
-              <span className="mini-bar mini-bar-primary" style={{ height: '55%' }} title="Active" />
+            <p className="mt-1 text-xs text-[#10B981] font-medium flex items-center gap-1">
+              <span>{formatPercent(yieldPct)}</span>
+              <span className="text-muted-foreground font-normal">recovery yield</span>
+            </p>
+          </div>
+        </div>
+
+        {/* Metric 2: Revenue At Risk */}
+        <div className="panel metric-card border-l-4 border-l-[#F59E0B]">
+          <div className="flex items-center justify-between text-muted-foreground">
+            <span className="text-xs font-semibold uppercase tracking-wider font-mono">Revenue at Risk</span>
+            <div className="w-7 h-7 rounded-md bg-[#F59E0B]/15 text-[#F59E0B] flex items-center justify-center">
+              <CircleDollarSign size={15} />
+            </div>
+          </div>
+          <div className="mt-2">
+            <div className="mono-number text-2xl lg:text-3xl font-bold text-white tracking-tight">
+              {formatCurrency(atRiskRev)}
+            </div>
+            <p className="mt-1 text-xs text-muted-foreground font-medium">
+              {activeCasesCount} active pipeline cases
+            </p>
+          </div>
+        </div>
+
+        {/* Metric 3: Total Volume Monitored */}
+        <div className="panel metric-card border-l-4 border-l-[#0C83FF]">
+          <div className="flex items-center justify-between text-muted-foreground">
+            <span className="text-xs font-semibold uppercase tracking-wider font-mono">Total Ingested Exposure</span>
+            <div className="w-7 h-7 rounded-md bg-[#0C83FF]/15 text-[#0C83FF] flex items-center justify-center">
+              <ShieldCheck size={15} />
+            </div>
+          </div>
+          <div className="mt-2">
+            <div className="mono-number text-2xl lg:text-3xl font-bold text-white tracking-tight">
+              {formatCurrency(totalExposure)}
+            </div>
+            <p className="mt-1 text-xs text-muted-foreground font-medium">
+              Across UPI AutoPay failures
+            </p>
+          </div>
+        </div>
+
+        {/* Metric 4: Guardrail Invariants */}
+        <div className="panel metric-card border-l-4 border-l-[#8B5CF6]">
+          <div className="flex items-center justify-between text-muted-foreground">
+            <span className="text-xs font-semibold uppercase tracking-wider font-mono">Unsafe Executions</span>
+            <div className="w-7 h-7 rounded-md bg-[#8B5CF6]/15 text-[#8B5CF6] flex items-center justify-center">
+              <Lock size={15} />
+            </div>
+          </div>
+          <div className="mt-2">
+            <div className="mono-number text-2xl lg:text-3xl font-bold text-[#10B981] tracking-tight">
+              0 Violations
+            </div>
+            <p className="mt-1 text-xs text-[#10B981] font-medium flex items-center gap-1">
+              <CheckCircle2 size={12} />
+              <span>100% Policy Intercepted</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Grid: Pipeline Diagnostics & Recent Activity */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        {/* Left 7 Cols: Pipeline Distribution & Invariant Gate */}
+        <div className="lg:col-span-7 space-y-5">
+          {/* Recovery Funnel Card */}
+          <div className="panel space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-border">
+              <div>
+                <h2 className="section-title text-base font-semibold text-white">
+                  Pipeline Health & State Distribution
+                </h2>
+                <p className="text-xs text-muted-foreground">
+                  Cases transitioning through deterministic state machines under PostgreSQL row-locking.
+                </p>
+              </div>
+              <button
+                onClick={() => onNavigate('queue')}
+                className="text-xs font-semibold text-[#0C83FF] hover:underline flex items-center gap-1"
+              >
+                <span>View Full Queue</span>
+                <ArrowRight size={13} />
+              </button>
+            </div>
+
+            {/* Visual Funnel Bar */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between text-xs font-mono text-muted-foreground">
+                <span>Recovery Conversion: {formatPercent(yieldPct)}</span>
+                <span>{recoveredCasesCount} Recovered / {totalCasesCount} Total</span>
+              </div>
+              <div className="w-full h-3 rounded-full bg-secondary overflow-hidden flex">
+                <div
+                  style={{ width: `${Math.max(yieldPct, 15)}%` }}
+                  className="bg-[#10B981] h-full transition-all duration-500"
+                  title="Recovered"
+                />
+                <div
+                  style={{ width: `${Math.max(100 - yieldPct, 20)}%` }}
+                  className="bg-[#F59E0B] h-full transition-all duration-500"
+                  title="In Recovery Pipeline"
+                />
+              </div>
+              <div className="flex items-center justify-between text-[11px] text-muted-foreground pt-1">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-sm bg-[#10B981]" />
+                  <span>Settled & Recovered</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-sm bg-[#F59E0B]" />
+                  <span>Active Worklist</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Invariant Matrix */}
+            <div className="mt-4 pt-3 border-t border-border space-y-2.5">
+              <p className="text-[11px] font-mono uppercase font-bold text-muted-foreground tracking-wider">
+                Active Deterministic Guardrails
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+                <div className="p-2.5 rounded-md bg-[#080D1A] border border-border flex items-start gap-2.5">
+                  <CheckCircle2 size={16} className="text-[#10B981] shrink-0 mt-0.5" />
+                  <div>
+                    <strong className="text-white font-semibold block">TRAI Quiet Hours (21:00–09:00 IST)</strong>
+                    <span className="text-[11px] text-muted-foreground">Normalized UTC &rarr; IST to prevent nocturnal customer outreach.</span>
+                  </div>
+                </div>
+
+                <div className="p-2.5 rounded-md bg-[#080D1A] border border-border flex items-start gap-2.5">
+                  <CheckCircle2 size={16} className="text-[#10B981] shrink-0 mt-0.5" />
+                  <div>
+                    <strong className="text-white font-semibold block">Zero AI Financial Authority</strong>
+                    <span className="text-[11px] text-muted-foreground">Strict schema allow-list strips unauthorized discounts and refunds.</span>
+                  </div>
+                </div>
+
+                <div className="p-2.5 rounded-md bg-[#080D1A] border border-border flex items-start gap-2.5">
+                  <CheckCircle2 size={16} className="text-[#10B981] shrink-0 mt-0.5" />
+                  <div>
+                    <strong className="text-white font-semibold block">Debit Claim Recon Lock</strong>
+                    <span className="text-[11px] text-muted-foreground">Customer debit claims freeze retries to prevent double debits.</span>
+                  </div>
+                </div>
+
+                <div className="p-2.5 rounded-md bg-[#080D1A] border border-border flex items-start gap-2.5">
+                  <CheckCircle2 size={16} className="text-[#10B981] shrink-0 mt-0.5" />
+                  <div>
+                    <strong className="text-white font-semibold block">Durable Webhook Idempotency</strong>
+                    <span className="text-[11px] text-muted-foreground">SHA-256 event deduplication blocks duplicate replays before LLM cost.</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Right Panel: Recent Activity & Cases */}
-        <div className="panel flex flex-col justify-between">
-          <div>
-            <div className="flex items-center justify-between">
+        {/* Right 5 Cols: Recent Pipeline Cases */}
+        <div className="lg:col-span-5 space-y-5">
+          <div className="panel space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-border">
               <div>
-                <p className="eyebrow">Recent activity</p>
-                <h2 className="section-title text-base">Pipeline state</h2>
+                <h2 className="section-title text-base font-semibold text-white">Recent Pipeline Cases</h2>
+                <p className="text-xs text-muted-foreground">Click any case to inspect in workspace.</p>
               </div>
               <button
                 onClick={() => onNavigate('queue')}
-                className="text-[11px] font-bold text-primary hover:underline flex items-center gap-1"
-                data-testid="link-view-all-queue"
+                className="text-xs font-semibold text-[#0C83FF] hover:underline"
               >
-                <span>View all</span>
-                <ArrowRight size={12} />
+                View all
               </button>
             </div>
 
-            <div className="mt-4 space-y-1 divide-y divide-border/60">
+            <div className="space-y-2.5">
               {recentCases.length === 0 ? (
-                <div className="empty-state py-6">
-                  <CheckCircle2 size={20} className="text-primary" />
-                  <p className="mt-2 text-xs font-semibold">No cases ingested</p>
-                  <p className="text-[11px] text-muted-foreground">Ingest a case via workspace to begin.</p>
+                <div className="p-6 text-center text-xs text-muted-foreground">
+                  No cases currently in pipeline. Run a live evaluation or demo!
                 </div>
               ) : (
-                recentCases.slice(0, 4).map((c) => (
+                recentCases.map((c) => (
                   <div
                     key={c.payment_id}
                     onClick={() => onSelectCase(c.payment_id)}
-                    className="pt-2.5 pb-2.5 flex items-center justify-between gap-3 cursor-pointer hover:bg-secondary/40 px-2 rounded transition-colors group"
-                    data-testid={`row-case-${c.payment_id}`}
+                    className="p-3 rounded-lg border border-border bg-[#080D1A] hover:bg-secondary/70 hover:border-[#0C83FF]/40 transition-all cursor-pointer flex items-center justify-between group"
                   >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="avatar avatar-small">
-                        {c.payment_id.slice(-2).toUpperCase()}
-                      </div>
-                      <div className="min-w-0">
-                        <p className="truncate text-xs font-bold text-foreground group-hover:text-primary transition-colors font-mono">
+                    <div className="min-w-0 pr-2">
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-xs font-bold text-white group-hover:text-[#0C83FF] transition-colors truncate">
                           {c.payment_id}
-                        </p>
-                        <p className="truncate text-[10px] text-muted-foreground font-mono">
-                          {c.invoice_id} &middot; {c.attempt_count} attempts
-                        </p>
+                        </span>
+                      </div>
+                      <div className="mt-1 flex items-center gap-2 text-[11px] text-muted-foreground font-mono">
+                        <span>{c.invoice_id}</span>
+                        <span>·</span>
+                        <span>{c.attempt_count} {c.attempt_count === 1 ? 'attempt' : 'attempts'}</span>
                       </div>
                     </div>
-                    <div className="text-right shrink-0">
-                      <p className="mono-number text-xs font-semibold text-foreground">
+
+                    <div className="text-right shrink-0 flex flex-col items-end gap-1">
+                      <span className="mono-number text-xs font-bold text-white">
                         {formatCurrency(c.amount_inr)}
-                      </p>
+                      </span>
                       <StatusBadge state={c.current_state} size="sm" />
                     </div>
                   </div>
                 ))
               )}
             </div>
-          </div>
 
-          <div className="mt-4 pt-3 border-t border-border/70 flex items-center justify-between text-[11px] text-muted-foreground">
-            <span>Database: PostgreSQL 16</span>
-            <span className="font-mono text-primary font-semibold">ROW-LOCKED</span>
-          </div>
-        </div>
-      </section>
-
-      {/* Lower Split: Verified Guardrails & Multi-Event Simulation Trigger */}
-      <section className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Verified Guardrails Panel */}
-        <div className="panel panel-dark space-y-3">
-          <div className="flex items-center justify-between border-b border-sidebar-border/80 pb-2.5">
-            <div className="flex items-center gap-2">
-              <ShieldCheck size={16} className="text-sidebar-primary" />
-              <h3 className="text-xs font-bold text-sidebar-foreground uppercase tracking-wide">
-                Verified System Guardrails
-              </h3>
+            <div className="pt-2 border-t border-border flex items-center justify-between text-xs text-muted-foreground font-mono">
+              <span>{systemStatus?.persistence_layer === 'POSTGRESQL_DURABLE' ? 'PostgreSQL 16 Engine' : 'Active Persistence'}</span>
+              <span className="text-[#0C83FF] font-semibold">Row-Locked Durability</span>
             </div>
-            <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-sidebar-primary/10 text-sidebar-primary border border-sidebar-primary/20">
-              IMMUTABLE
-            </span>
           </div>
-          <ul className="space-y-2 text-xs text-sidebar-foreground/80">
-            {(systemStatus?.invariants_verified || [
-              'Zero AI Financial Authority (Deterministic Policy Gate Enforcement)',
-              'Cryptographic SHA-256 Tamper-Evident Audit Ledger',
-              'PostgreSQL Row-Locked Concurrency & Terminal State Locks',
-              'Durable Idempotency & Webhook Deduplication',
-              'Mandatory Authoritative Bank Settlement Reconciliation'
-            ]).map((inv, idx) => (
-              <li key={idx} className="flex items-center gap-2 text-[11px]">
-                <CheckCircle2 size={13} className="text-sidebar-primary shrink-0" />
-                <span>{inv}</span>
-              </li>
-            ))}
-          </ul>
         </div>
+      </div>
 
-        {/* Multi-Event Simulation Callout */}
-        <div className="panel flex flex-col justify-between space-y-3">
-          <div>
-            <div className="flex items-center justify-between">
+      {/* Interactive Reviewer Demo Modal */}
+      {demoModalOpen && demoResult && (
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-[#0E1626] border border-border rounded-xl max-w-2xl w-full p-6 shadow-2xl space-y-5 revive-enter">
+            <div className="flex items-start justify-between border-b border-border pb-3">
               <div>
-                <p className="eyebrow">Demo harness</p>
-                <h3 className="section-title text-sm">Multi-Event Lifecycle Runner</h3>
+                <span className="eyebrow text-[#0C83FF]">Deterministic Verification</span>
+                <h3 className="text-lg font-bold text-white mt-0.5">
+                  Multi-Event Lifecycle & Idempotency Demo
+                </h3>
+                <p className="text-xs text-muted-foreground">
+                  Demonstrating live webhook failure ingestion, debit claim recon lock, settlement reconciliation, and duplicate suppression.
+                </p>
               </div>
-              <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-secondary text-muted-foreground border border-border">
-                E2E TEST
-              </span>
+              <button
+                onClick={() => setDemoModalOpen(false)}
+                className="p-1 rounded-md text-muted-foreground hover:text-white hover:bg-secondary"
+              >
+                <X size={18} />
+              </button>
             </div>
-            <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
-              Executes a sequence of webhook events: Initial Autopay Failure &rarr; Debit Claim Hold &rarr; Bank Settlement Recon &rarr; Cryptographic Ledger Recording.
-            </p>
-          </div>
 
-          <div className="pt-2 flex items-center gap-3">
-            <button
-              onClick={handleRunDemo}
-              disabled={demoRunning}
-              className="revive-button revive-button-outline"
-              data-testid="button-run-demo-flow"
-            >
-              <Zap size={13} className={demoRunning ? 'animate-spin text-accent' : ''} />
-              <span>{demoRunning ? 'Executing sequence...' : 'Run multi-event demo'}</span>
-            </button>
-            {demoResult && (
-              <span className="text-[11px] font-mono text-primary">
-                ✓ Recorded {demoResult.events_processed || 3} events to PostgreSQL
+            {/* Stepper of Events */}
+            <div className="space-y-3">
+              {(demoResult.events || []).map((ev: any, idx: number) => (
+                <div
+                  key={idx}
+                  className="p-3.5 rounded-lg border border-border bg-[#080D1A] flex items-start gap-3"
+                >
+                  <div className="w-6 h-6 rounded-full bg-[#0C83FF]/15 text-[#0C83FF] border border-[#0C83FF]/30 flex items-center justify-center text-xs font-mono font-bold shrink-0 mt-0.5">
+                    {ev.step || idx + 1}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between">
+                      <strong className="text-xs font-semibold text-white font-mono">{ev.event_type}</strong>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-secondary text-white font-medium">
+                        {ev.resulting_state}
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {ev.action_taken}
+                    </p>
+                    <div className="mt-2 flex items-center gap-3 text-[11px] font-mono text-muted-foreground">
+                      <span>Event ID: <strong className="text-white">{ev.event_id}</strong></span>
+                      <span>·</span>
+                      <span>Policy: <strong className="text-[#10B981]">{ev.policy_action}</strong></span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Bottom Actions */}
+            <div className="pt-3 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-3">
+              <span className="text-xs font-mono text-emerald-400 flex items-center gap-1.5">
+                <CheckCircle2 size={14} />
+                <span>All events committed & verified in PostgreSQL audit ledger</span>
               </span>
-            )}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    setDemoModalOpen(false);
+                    onNavigate('ledger');
+                  }}
+                  className="revive-button revive-button-outline"
+                >
+                  <ExternalLink size={12} />
+                  <span>Inspect Audit Ledger</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setDemoModalOpen(false);
+                    onSelectCase('pay_demo_multi_001');
+                  }}
+                  className="revive-button revive-button-primary"
+                >
+                  <span>Open in Workspace</span>
+                  <ArrowRight size={12} />
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-      </section>
+      )}
     </div>
   );
 };

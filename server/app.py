@@ -266,6 +266,12 @@ async def get_case(
         c = persistence_mgr.get_case(payment_id)
         if not c:
             raise HTTPException(status_code=404, detail=f"Case {payment_id} not found")
+        blocks = [
+            b.model_dump() for b in persistence_mgr.get_ledger_blocks()
+            if b.payment_id == payment_id
+        ]
+        if blocks:
+            c["latest_audit_block"] = blocks[-1]
         return c
     else:
         return {
@@ -345,6 +351,8 @@ async def get_benchmark_summary(
             "total_held_out_cases": 68,
             "total_exposure_at_risk_inr": 311950.0
         },
+        "six_way_ablation": six_way_data,
+        "live_gemini_evaluation": live_gemini_data,
         "evaluation_modes": {
             "six_way_ablation": {
                 "title": "Six-Way Architectural Ablation (Offline Baselines)",
@@ -495,13 +503,30 @@ async def evaluate_single(
             channel=req.channel
         )
 
+    pm_raw = (req.payment_method or "UPI_AUTOPAY").upper().strip()
+    if pm_raw in ("UPI", "UPI_AUTOPAY"):
+        pm_enum = PaymentMethod.UPI_AUTOPAY
+    elif pm_raw in ("CARD", "MANDATE", "CARD_MANDATE"):
+        pm_enum = PaymentMethod.CARD_MANDATE
+    elif pm_raw == "NETBANKING":
+        pm_enum = PaymentMethod.NETBANKING
+    elif pm_raw == "UPI_COLLECT":
+        pm_enum = PaymentMethod.UPI_COLLECT
+    elif pm_raw == "CARD_ONE_TIME":
+        pm_enum = PaymentMethod.CARD_ONE_TIME
+    else:
+        try:
+            pm_enum = PaymentMethod(pm_raw)
+        except ValueError:
+            pm_enum = PaymentMethod.UPI_AUTOPAY
+
     telemetry = TransactionTelemetry(
         payment_id=req.payment_id,
         invoice_id=req.invoice_id,
         amount_inr=req.amount_inr,
         gateway_error_code=req.gateway_error_code,
         bank_raw_response_code=req.bank_raw_response_code,
-        payment_method=PaymentMethod(req.payment_method),
+        payment_method=pm_enum,
         latency_ms=req.latency_ms,
         bank_switch_degradation_score=req.bank_switch_degradation_score,
         attempt_count=req.attempt_count,
