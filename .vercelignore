@@ -1,0 +1,12 @@
+.git
+.pytest_cache
+.pg_test
+__pycache__
+*.pyc
+tests
+reports
+walkthrough.md
+.env
+.venv
+node_modules
+frontend/node_modules

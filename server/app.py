@@ -67,7 +67,8 @@ _ledger_backup: Optional[AuditLedger] = None
 async def lifespan(app: FastAPI):
     global persistence_mgr, merchant_policy, policy_gate, executor
     db_url_env = os.getenv("DATABASE_URL")
-    demo_fallback = os.getenv("RAZP_DEMO_IN_MEMORY", "false").lower() == "true"
+    is_vercel = bool(os.getenv("VERCEL") or os.getenv("VERCEL_ENV"))
+    demo_fallback = os.getenv("RAZP_DEMO_IN_MEMORY", "false").lower() == "true" or (is_vercel and not db_url_env)
 
     if not db_url_env:
         if not demo_fallback:
@@ -124,6 +125,7 @@ allowed_origins = [o.strip() for o in allowed_origins_env.split(",") if o.strip(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

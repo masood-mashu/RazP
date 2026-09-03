@@ -15,9 +15,17 @@ from datetime import datetime, time
 from contextlib import contextmanager
 from typing import Optional, Dict, Any, List, Tuple
 
-import psycopg2
-from psycopg2 import pool
-from psycopg2.extras import RealDictCursor, Json
+try:
+    import psycopg2
+    from psycopg2 import pool
+    from psycopg2.extras import RealDictCursor, Json
+    PSYCOPG2_AVAILABLE = True
+except Exception:
+    psycopg2 = None
+    pool = None
+    RealDictCursor = None
+    Json = None
+    PSYCOPG2_AVAILABLE = False
 
 from core.schemas import (
     PaymentState,
@@ -59,6 +67,11 @@ class PersistenceManager:
         min_conn: int = 1,
         max_conn: int = 10
     ):
+        if not PSYCOPG2_AVAILABLE:
+            raise PersistenceError(
+                "psycopg2 is not available in the current runtime environment. "
+                "Set RAZP_DEMO_IN_MEMORY=true or install psycopg2-binary with required C libraries."
+            )
         self.db_url = db_url or os.getenv("DATABASE_URL")
         if not self.db_url:
             raise PersistenceError(
