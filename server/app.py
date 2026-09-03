@@ -68,7 +68,12 @@ async def lifespan(app: FastAPI):
     global persistence_mgr, merchant_policy, policy_gate, executor
     db_url_env = os.getenv("DATABASE_URL")
     is_vercel = bool(os.getenv("VERCEL") or os.getenv("VERCEL_ENV"))
-    demo_fallback = os.getenv("RAZP_DEMO_IN_MEMORY", "false").lower() == "true" or (is_vercel and not db_url_env)
+
+    if is_vercel and db_url_env and ("localhost" in db_url_env or "127.0.0.1" in db_url_env):
+        print("[RazP] NOTICE: Localhost DATABASE_URL detected in cloud Vercel deployment. Falling back to in-memory demo mode.")
+        db_url_env = None
+
+    demo_fallback = os.getenv("RAZP_DEMO_IN_MEMORY", "false").lower() == "true" or is_vercel or not db_url_env
 
     if not db_url_env:
         if not demo_fallback:
@@ -85,7 +90,15 @@ async def lifespan(app: FastAPI):
                 raise RuntimeError("PostgreSQL database connection check failed.")
             schema_ok, missing = persistence_mgr.validate_migration_schema()
             if not schema_ok:
-                raise RuntimeError(f"Database schema validation failed. Missing tables: {missing}. Run scripts/migrate.py.")
+                try:
+                    from scripts.migrate import run_migrations
+                    print(f"[RazP] Missing database tables {missing}. Running migrations automatically...")
+                    run_migrations(db_url=db_url_env)
+                    schema_ok, missing = persistence_mgr.validate_migration_schema()
+                except Exception as mig_err:
+                    print(f"[RazP] Auto-migration attempt warning: {mig_err}")
+                if not schema_ok:
+                    raise RuntimeError(f"Database schema validation failed. Missing tables: {missing}. Run scripts/migrate.py.")
             is_valid, err = persistence_mgr.verify_persisted_ledger_integrity()
             if not is_valid:
                 print(f"[RazP] WARNING: Ledger cryptographic integrity warning on startup: {err}")
@@ -99,7 +112,7 @@ async def lifespan(app: FastAPI):
         except Exception as exc:
             if not demo_fallback:
                 raise RuntimeError(f"FATAL: Database startup validation failed: {exc}") from exc
-            print(f"[RazP] WARNING: Database failed on startup, falling back to in-memory due to RAZP_DEMO_IN_MEMORY=true: {exc}")
+            print(f"[RazP] WARNING: Database failed on startup, falling back to in-memory mode: {exc}")
             persistence_mgr = None
     yield
 
