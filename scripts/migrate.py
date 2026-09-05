@@ -19,9 +19,11 @@ import psycopg2
 
 
 def get_db_url() -> str:
-    db_url = os.getenv("DATABASE_URL")
+    db_url = os.getenv("DATABASE_URL") or os.getenv("POSTGRES_URL") or os.getenv("POSTGRES_PRISMA_URL") or os.getenv("SUPABASE_DATABASE_URL")
     if not db_url:
-        raise ValueError("DATABASE_URL environment variable is required to run migrations.")
+        raise ValueError("DATABASE_URL (or POSTGRES_URL) environment variable is required to run migrations.")
+    if db_url.startswith("postgres://"):
+        db_url = "postgresql://" + db_url[len("postgres://"):]
     return db_url
 
 

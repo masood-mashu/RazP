@@ -12,6 +12,8 @@ try:
 except ImportError:
     pass
 
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
 from fastapi import FastAPI, HTTPException, Response, Request, Depends, Header
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -66,7 +68,9 @@ _ledger_backup: Optional[AuditLedger] = None
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global persistence_mgr, merchant_policy, policy_gate, executor
-    db_url_env = os.getenv("DATABASE_URL")
+    db_url_env = os.getenv("DATABASE_URL") or os.getenv("POSTGRES_URL") or os.getenv("POSTGRES_PRISMA_URL") or os.getenv("SUPABASE_DATABASE_URL")
+    if db_url_env and db_url_env.startswith("postgres://"):
+        db_url_env = "postgresql://" + db_url_env[len("postgres://"):]
     is_vercel = bool(os.getenv("VERCEL") or os.getenv("VERCEL_ENV"))
 
     if is_vercel and db_url_env and ("localhost" in db_url_env or "127.0.0.1" in db_url_env):
@@ -339,8 +343,12 @@ async def get_benchmark_summary(
     """
     Returns verified ground-truth results from held-out evaluation dataset (68 cases).
     """
-    ablation_file = "reports/ablation_results.json"
-    gemini_file = "reports/gemini_eval_results.json"
+    ablation_file = os.path.join(ROOT_DIR, "reports", "ablation_results.json")
+    if not os.path.exists(ablation_file):
+        ablation_file = "reports/ablation_results.json"
+    gemini_file = os.path.join(ROOT_DIR, "reports", "gemini_eval_results.json")
+    if not os.path.exists(gemini_file):
+        gemini_file = "reports/gemini_eval_results.json"
 
     six_way_data = None
     if os.path.exists(ablation_file):

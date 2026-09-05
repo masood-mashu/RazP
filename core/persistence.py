@@ -72,10 +72,13 @@ class PersistenceManager:
                 "psycopg2 is not available in the current runtime environment. "
                 "Set RAZP_DEMO_IN_MEMORY=true or install psycopg2-binary with required C libraries."
             )
-        self.db_url = db_url or os.getenv("DATABASE_URL")
+        raw_url = db_url or os.getenv("DATABASE_URL") or os.getenv("POSTGRES_URL") or os.getenv("POSTGRES_PRISMA_URL") or os.getenv("SUPABASE_DATABASE_URL")
+        if raw_url and raw_url.startswith("postgres://"):
+            raw_url = "postgresql://" + raw_url[len("postgres://"):]
+        self.db_url = raw_url
         if not self.db_url:
             raise PersistenceError(
-                "DATABASE_URL is not set. Please provide a valid PostgreSQL connection string."
+                "DATABASE_URL (or POSTGRES_URL) is not set. Please provide a valid PostgreSQL connection string."
             )
         
         try:

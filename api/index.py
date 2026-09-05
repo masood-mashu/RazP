@@ -13,8 +13,13 @@ if ROOT_DIR not in sys.path:
 # Auto-detect Vercel environment
 os.environ.setdefault("VERCEL", "1")
 
-# Default to in-memory fallback on Vercel if DATABASE_URL is not configured
-if "DATABASE_URL" not in os.environ and "RAZP_DEMO_IN_MEMORY" not in os.environ:
+# Detect database URL from standard DATABASE_URL or Supabase integration (POSTGRES_URL)
+db_url = os.getenv("DATABASE_URL") or os.getenv("POSTGRES_URL") or os.getenv("POSTGRES_PRISMA_URL") or os.getenv("SUPABASE_DATABASE_URL")
+if db_url and "DATABASE_URL" not in os.environ:
+    os.environ["DATABASE_URL"] = db_url
+
+# Default to in-memory fallback on Vercel if no database URL is configured
+if not db_url and "RAZP_DEMO_IN_MEMORY" not in os.environ:
     os.environ["RAZP_DEMO_IN_MEMORY"] = "true"
 
 # Export the FastAPI instance directly so Vercel detects isinstance(app, FastAPI)
