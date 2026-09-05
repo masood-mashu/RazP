@@ -41,6 +41,13 @@ from core.state_machine import StateMachine, InvalidStateTransitionError
 from core.ledger import AuditLedger
 
 
+class EventReservationStatus(str, Enum):
+    NEW_RESERVED = "NEW_RESERVED"
+    ALREADY_PROCESSED = "ALREADY_PROCESSED"
+    IN_FLIGHT = "IN_FLIGHT"
+    RETRY_RESERVED = "RETRY_RESERVED"
+
+
 class PersistenceError(Exception):
     """Base exception for persistence errors."""
     pass
@@ -444,13 +451,6 @@ class PersistenceManager:
             for t in case_data.get("transitions", [])
         ]
         return sm
-
-class EventReservationStatus(str, Enum):
-    NEW_RESERVED = "NEW_RESERVED"
-    ALREADY_PROCESSED = "ALREADY_PROCESSED"
-    IN_FLIGHT = "IN_FLIGHT"
-    RETRY_RESERVED = "RETRY_RESERVED"
-
 
     # =========================================================================
     # 2. Processed Events / Two-Phase Idempotency Protection
