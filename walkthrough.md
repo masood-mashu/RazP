@@ -20,10 +20,13 @@ We have conducted a complete software engineering overhaul of **RazP Sentinel** 
 
 ## 2. Visual Audit & Full Project Video Showcase
 
-### 2.0 Complete 5-Minute Browser Walkthrough Recording (4.76 Minutes)
-Recorded live in the browser covering the Command Center, 3-step Reviewer Demo modal, Case Workspace, Cryptographic Ledger, and Policy Engine:
+### 2.0 Complete 5-Minute Project Video Showcase (MP4 & WebM with Voiceover & Subtitles)
+The project demonstration video is rendered in universal **MP4** and **WebM** formats (4 minutes 45 seconds) with natural expressive narration and synchronized English subtitles:
 
-![Full 5-Minute Browser Demo Video](file:///C:/Users/Masood/.gemini/antigravity-ide/brain/e16ac2c2-f60e-45d8-8cd5-d350fd58e966/razp_5min_submission_showcase.webp)
+- 🎬 **Universal MP4 Video (Video + Audio + Subtitles):** [**`razp_sentinel_5min_showcase.mp4`**](file:///d:/hackathon/RazorPay/razp_sentinel_5min_showcase.mp4) (16.2 MB)
+- 🌐 **WebM Video (HTML5 Web Playback):** [**`razp_sentinel_5min_showcase.webm`**](file:///d:/hackathon/RazorPay/razp_sentinel_5min_showcase.webm) (9.2 MB)
+- 🎙️ **Standalone Voiceover Audio:** [**`narration_voiceover.mp3`**](file:///d:/hackathon/RazorPay/narration_voiceover.mp3) (1.8 MB)
+- 📝 **Synchronized Subtitles (SRT):** [**`subtitles.srt`**](file:///d:/hackathon/RazorPay/subtitles.srt)
 
 ---
 
