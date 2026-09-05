@@ -125,8 +125,92 @@ class PersistenceManager:
                     raise
 
     # =========================================================================
-    # 1. Payment Cases & Transition History
+    # Database Health & Integrity Verification
     # =========================================================================
+
+    def validate_database_health(self) -> bool:
+        """Runs a SELECT 1 ping to verify database connectivity."""
+        try:
+            with self.get_connection() as conn:
+                with conn.cursor() as cur:
+                    cur.execute("SELECT 1;")
+                    row = cur.fetchone()
+                    return bool(row and (row[0] == 1 or row["?column?"] == 1 if isinstance(row, dict) else row[0] == 1))
+        except Exception:
+            return False
+
+    def validate_migration_schema(self) -> Tuple[bool, List[str]]:
+        """Verifies that all required tables exist in the public schema."""
+        required_tables = [
+            "payment_cases",
+            "state_transitions",
+            "processed_events",
+            "audit_blocks",
+            "merchant_policies"
+        ]
+        missing = []
+        try:
+            with self.get_connection() as conn:
+                with conn.cursor() as cur:
+                    cur.execute("""
+                        SELECT table_name 
+                        FROM information_schema.tables 
+                        WHERE table_schema = 'public';
+                    """)
+                    existing = {row[0] if not isinstance(row, dict) else row["table_name"] for row in cur.fetchall()}
+                    for tbl in required_tables:
+                        if tbl not in existing:
+                            missing.append(tbl)
+            return (len(missing) == 0, missing)
+        except Exception as exc:
+            return (False, [f"Error checking schema: {exc}"])
+
+    def verify_persisted_ledger_integrity(self) -> Tuple[bool, Optional[str]]:
+        """Verifies the SHA-256 hash chaining of persisted audit blocks."""
+        try:
+            with self.get_connection() as conn:
+                with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                    cur.execute("SELECT * FROM audit_blocks ORDER BY block_index ASC;")
+                    rows = cur.fetchall()
+                    if not rows:
+                        return (True, None)
+                    prev_hash = AuditLedger.GENESIS_HASH
+                    for row in rows:
+                        if row["previous_hash"] != prev_hash:
+                            return (False, f"Broken link at block {row['block_index']}: previous_hash mismatch")
+                        # Verify current block hash
+                        ai_reasoning = row.get("ai_reasoning")
+                        if isinstance(ai_reasoning, str):
+                            try:
+                                ai_reasoning = json.loads(ai_reasoning)
+                            except Exception:
+                                pass
+                        policy_decision = row.get("policy_decision")
+                        if isinstance(policy_decision, str):
+                            try:
+                                policy_decision = json.loads(policy_decision)
+                            except Exception:
+                                pass
+
+                        payload = {
+                            "index": row["block_index"],
+                            "timestamp": row["block_timestamp"],
+                            "payment_id": row["payment_id"],
+                            "telemetry_hash": row["telemetry_hash"],
+                            "ai_reasoning": ai_reasoning,
+                            "policy_decision": policy_decision,
+                            "action_executed": row["action_executed"],
+                            "resulting_state": row["resulting_state"],
+                            "previous_hash": row["previous_hash"]
+                        }
+                        encoded = json.dumps(payload, sort_keys=True, default=str).encode("utf-8")
+                        calculated = hashlib.sha256(encoded).hexdigest()
+                        if calculated != row["current_hash"]:
+                            return (False, f"Tampered block hash at index {row['block_index']}")
+                        prev_hash = row["current_hash"]
+            return (True, None)
+        except Exception as exc:
+            return (False, f"Integrity check exception: {exc}")
 
     def get_or_create_case(
         self,
