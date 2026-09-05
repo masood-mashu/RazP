@@ -56,8 +56,17 @@ export const App: React.FC = () => {
         onRefresh={handleGlobalRefresh}
         isRefreshing={isRefreshing}
         onToggleMobileMenu={() => setMobileSidebarOpen((prev) => !prev)}
+        mobileMenuOpen={mobileSidebarOpen}
       />
       <div className="flex-1 flex overflow-hidden relative">
+        {/* Mobile Backdrop - strictly below Sidebar (z-40) */}
+        {mobileSidebarOpen && (
+          <div
+            className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm lg:hidden transition-opacity duration-200"
+            onClick={() => setMobileSidebarOpen(false)}
+            aria-hidden="true"
+          />
+        )}
         <Sidebar
           currentTab={currentTab}
           onSelectTab={setCurrentTab}
@@ -65,12 +74,6 @@ export const App: React.FC = () => {
           mobileOpen={mobileSidebarOpen}
           onCloseMobile={() => setMobileSidebarOpen(false)}
         />
-        {mobileSidebarOpen && (
-          <div
-            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
-            onClick={() => setMobileSidebarOpen(false)}
-          />
-        )}
         <main className="flex-1 overflow-hidden bg-[#070B14]">
           {renderContent()}
         </main>

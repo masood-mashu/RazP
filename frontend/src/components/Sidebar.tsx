@@ -7,7 +7,9 @@ import {
   BarChart3,
   FileClock,
   ShieldCheck,
-  ChevronRight
+  ChevronRight,
+  X,
+  Zap
 } from 'lucide-react';
 
 export type TabType =
@@ -52,10 +54,33 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <aside
-      className={`fixed lg:static inset-y-0 left-0 z-40 w-64 flex flex-col bg-[#080D1A] text-sidebar-foreground border-r border-border transition-transform duration-200 ${
+      className={`fixed lg:static inset-y-0 left-0 z-50 w-72 max-w-[85vw] flex flex-col bg-[#080D1A] text-sidebar-foreground border-r border-border shadow-2xl transition-transform duration-200 ease-out ${
         mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
       }`}
+      aria-label="Sidebar Navigation"
     >
+      {/* Mobile Drawer Header with Close Button */}
+      <div className="lg:hidden flex items-center justify-between px-4 py-3.5 border-b border-border bg-[#0B1222]">
+        <div className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-lg bg-[#0C83FF]/15 border border-[#0C83FF]/30 flex items-center justify-center text-[#0C83FF]">
+            <Zap size={14} className="fill-[#0C83FF]" />
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="text-sm font-bold tracking-tight text-white">RazP</span>
+            <span className="text-xs font-semibold text-[#0C83FF]">Sentinel</span>
+          </div>
+        </div>
+        <button
+          onClick={onCloseMobile}
+          className="p-1.5 rounded-md hover:bg-secondary text-muted-foreground hover:text-white transition-colors focus:outline-none"
+          title="Close navigation menu"
+          aria-label="Close navigation menu"
+          data-testid="button-close-mobile-menu"
+        >
+          <X size={18} />
+        </button>
+      </div>
+
       {/* Navigation Links */}
       <div className="flex-1 overflow-y-auto px-3.5 py-4 space-y-6 revive-scroll">
         {/* Operations Section */}

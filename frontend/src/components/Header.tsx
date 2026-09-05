@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Database, Cpu, RefreshCw, Key, Menu, Zap } from 'lucide-react';
+import { Database, Cpu, RefreshCw, Key, Menu, X, Zap } from 'lucide-react';
 import { api, getAuthToken, setAuthToken } from '../api/client';
 import type { SystemStatus } from '../api/types';
 
@@ -7,6 +7,7 @@ interface HeaderProps {
   onRefresh?: () => void;
   isRefreshing?: boolean;
   onToggleMobileMenu?: () => void;
+  mobileMenuOpen?: boolean;
   onRunDemo?: () => void;
   isDemoRunning?: boolean;
 }
@@ -22,6 +23,7 @@ export const Header: React.FC<HeaderProps> = ({
   onRefresh,
   isRefreshing,
   onToggleMobileMenu,
+  mobileMenuOpen = false,
   onRunDemo,
   isDemoRunning,
 }) => {
@@ -57,11 +59,13 @@ export const Header: React.FC<HeaderProps> = ({
         {onToggleMobileMenu && (
           <button
             onClick={onToggleMobileMenu}
-            className="lg:hidden p-1.5 rounded hover:bg-secondary text-muted-foreground hover:text-foreground"
-            title="Open navigation menu"
+            className="lg:hidden p-1.5 rounded hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors focus:outline-none"
+            title={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={mobileMenuOpen}
             data-testid="button-open-mobile-menu"
           >
-            <Menu size={18} />
+            {mobileMenuOpen ? <X size={18} className="text-white" /> : <Menu size={18} />}
           </button>
         )}
 
