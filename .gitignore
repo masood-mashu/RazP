@@ -17,3 +17,11 @@ RazP/
 .pg_test/
 node_modules/
 dist/
+
+# Media & recording artifacts
+*.mp4
+*.webm
+*.mp3
+*.wav
+*.webp
+recordings/
