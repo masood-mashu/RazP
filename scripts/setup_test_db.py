@@ -115,14 +115,19 @@ def start_test_db() -> str:
     # Wait for postgres to accept connections
     time.sleep(2)
 
-    # Create database if needed
-    createdb_cmd = [
-        str(pg_bin / "createdb.exe"),
-        "-p", str(PORT),
-        "-U", USER,
-        DB_NAME
-    ]
-    subprocess.run(createdb_cmd, capture_output=True)  # OK if already exists
+    # Create database if needed using psycopg2
+    try:
+        import psycopg2
+        conn = psycopg2.connect(f"postgresql://{USER}@localhost:{PORT}/postgres")
+        conn.autocommit = True
+        cur = conn.cursor()
+        cur.execute(f"SELECT 1 FROM pg_database WHERE datname='{DB_NAME}';")
+        if not cur.fetchone():
+            cur.execute(f"CREATE DATABASE {DB_NAME};")
+            print(f"[setup_test_db] Created database {DB_NAME}.")
+        conn.close()
+    except Exception as e:
+        print(f"[setup_test_db] Note on database creation: {e}")
 
     db_url = f"postgresql://{USER}@localhost:{PORT}/{DB_NAME}"
     print(f"[setup_test_db] PostgreSQL test database ready at: {db_url}")

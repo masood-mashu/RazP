@@ -73,7 +73,7 @@ async def lifespan(app: FastAPI):
         print("[RazP] NOTICE: Localhost DATABASE_URL detected in cloud Vercel deployment. Falling back to in-memory demo mode.")
         db_url_env = None
 
-    demo_fallback = os.getenv("RAZP_DEMO_IN_MEMORY", "false").lower() == "true" or is_vercel or not db_url_env
+    demo_fallback = os.getenv("RAZP_DEMO_IN_MEMORY", "false").lower() == "true" or is_vercel
 
     if not db_url_env:
         if not demo_fallback:
