@@ -1,7 +1,7 @@
 from __future__ import annotations
 import hashlib
 import json
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Tuple
 from core.schemas import AuditBlock, TransactionTelemetry, AIReasonerOutput, PolicyDecision, ExecutionResult
 
 

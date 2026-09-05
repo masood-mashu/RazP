@@ -552,14 +552,14 @@ async def evaluate_single(
         "final_state": sm.current_state.value,
         "ai_provenance": {
             "model": reasoning_res.get("model", reasoner.model_name),
-            "is_live_gemini": not reasoning_res.get("is_fallback", True),
-            "latency_ms": 120,
+            "is_live_gemini": reasoning_res.get("is_live_gemini", False),
+            "latency_ms": reasoning_res.get("latency_ms", 0),
             "correlation_id": actor.correlation_id,
             "actor_id": actor.actor_id
         },
         "reasoner_meta": {
             "model": reasoning_res.get("model", reasoner.model_name),
-            "is_fallback": reasoning_res.get("is_fallback", True),
+            "is_fallback": reasoning_res.get("fallback_used", True),
             "correlation_id": actor.correlation_id,
             "actor_id": actor.actor_id
         }
@@ -1205,7 +1205,11 @@ if os.path.exists(frontend_dist):
     async def serve_react_spa(full_path: str):
         if full_path.startswith("api/"):
             raise HTTPException(status_code=404, detail="API endpoint not found")
-        file_path = os.path.join(frontend_dist, full_path)
+        frontend_root = os.path.abspath(frontend_dist)
+        safe_rel_path = os.path.normpath("/" + full_path).lstrip("/\\")
+        file_path = os.path.abspath(os.path.join(frontend_root, safe_rel_path))
+        if not file_path.startswith(frontend_root + os.sep):
+            raise HTTPException(status_code=404, detail="Resource not found")
         if os.path.exists(file_path) and os.path.isfile(file_path):
             return FileResponse(file_path)
         return FileResponse(os.path.join(frontend_dist, "index.html"))
