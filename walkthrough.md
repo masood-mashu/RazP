@@ -18,7 +18,14 @@ We have conducted a complete software engineering overhaul of **RazP Sentinel** 
 
 ---
 
-## 2. Visual Audit & Screenshots
+## 2. Visual Audit & Full Project Video Showcase
+
+### 2.0 Complete 5-Minute Browser Walkthrough Recording
+Recorded live in the browser covering the Command Center, 3-step Reviewer Demo modal, Case Workspace, Cryptographic Ledger, and Policy Engine:
+
+![Full Browser Demo Video](file:///C:/Users/Masood/.gemini/antigravity-ide/brain/e16ac2c2-f60e-45d8-8cd5-d350fd58e966/razp_project_demo_1788622358303.webp)
+
+---
 
 ### 2.1 Recovery Command Center
 The Command Center features high-contrast KPI cards, real-time exposure distribution, deterministic guardrails summary, and live pipeline cases with PostgreSQL row-locked durability badges.
