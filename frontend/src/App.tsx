@@ -12,6 +12,7 @@ export const App: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<TabType>('command-center');
   const [activePaymentId, setActivePaymentId] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+  const [refreshKey, setRefreshKey] = useState<number>(0);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState<boolean>(false);
 
   const handleSelectCase = (paymentId: string) => {
@@ -22,31 +23,33 @@ export const App: React.FC = () => {
 
   const handleGlobalRefresh = () => {
     setIsRefreshing(true);
+    setRefreshKey((prev) => prev + 1);
     setTimeout(() => setIsRefreshing(false), 600);
   };
 
   const renderContent = () => {
     switch (currentTab) {
       case 'command-center':
-        return <CommandCenter onSelectCase={handleSelectCase} onNavigate={setCurrentTab} />;
+        return <CommandCenter key={refreshKey} onSelectCase={handleSelectCase} onNavigate={setCurrentTab} />;
       case 'queue':
-        return <RecoveryQueue onSelectCase={handleSelectCase} />;
+        return <RecoveryQueue key={refreshKey} onSelectCase={handleSelectCase} />;
       case 'workspace':
         return (
           <CaseWorkspace
+            key={refreshKey}
             initialPaymentId={activePaymentId}
             onClearCase={() => setActivePaymentId(null)}
             onNavigateToLedger={() => setCurrentTab('ledger')}
           />
         );
       case 'ledger':
-        return <AuditLedgerPage onSelectCase={handleSelectCase} />;
+        return <AuditLedgerPage key={refreshKey} onSelectCase={handleSelectCase} />;
       case 'policy':
-        return <PolicyPage />;
+        return <PolicyPage key={refreshKey} />;
       case 'benchmark':
-        return <BenchmarkPage />;
+        return <BenchmarkPage key={refreshKey} />;
       default:
-        return <CommandCenter onSelectCase={handleSelectCase} onNavigate={setCurrentTab} />;
+        return <CommandCenter key={refreshKey} onSelectCase={handleSelectCase} onNavigate={setCurrentTab} />;
     }
   };
 
