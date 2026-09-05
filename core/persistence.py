@@ -13,6 +13,7 @@ import json
 import hashlib
 from datetime import datetime, time
 from contextlib import contextmanager
+from enum import Enum
 from typing import Optional, Dict, Any, List, Tuple
 
 try:
@@ -291,6 +292,11 @@ class PersistenceManager:
                     raise CaseNotFoundError(f"Case {payment_id} does not exist.")
 
                 curr_state_val = row["current_state"]
+                if from_state.value != curr_state_val:
+                    raise InvalidStateTransitionError(
+                        f"State conflict on case {payment_id}: database current state is '{curr_state_val}', "
+                        f"but caller attempted transition from '{from_state.value}'."
+                    )
                 if row["is_terminal"]:
                     raise InvalidStateTransitionError(
                         f"Cannot transition out of terminal state {curr_state_val}. Attempted transition to {to_state.value}."
@@ -355,9 +361,116 @@ class PersistenceManager:
         ]
         return sm
 
+class EventReservationStatus(str, Enum):
+    NEW_RESERVED = "NEW_RESERVED"
+    ALREADY_PROCESSED = "ALREADY_PROCESSED"
+    IN_FLIGHT = "IN_FLIGHT"
+    RETRY_RESERVED = "RETRY_RESERVED"
+
+
     # =========================================================================
-    # 2. Processed Events / Idempotency Protection
+    # 2. Processed Events / Two-Phase Idempotency Protection
     # =========================================================================
+
+    def reserve_event(
+        self,
+        event_id: str,
+        payment_id: str,
+        payload_str: str,
+        conn=None
+    ) -> EventReservationStatus:
+        """
+        Two-Phase Idempotency Phase 1:
+        Atomically attempts to reserve an event reservation BEFORE long LLM reasoning.
+        Returns:
+          - NEW_RESERVED: Successfully reserved pending execution.
+          - ALREADY_PROCESSED: Event was already committed previously; suppress replay.
+          - IN_FLIGHT: Another worker is actively processing this event.
+          - RETRY_RESERVED: Previous attempt failed; retry reservation granted.
+        """
+        payload_hash = hashlib.sha256(payload_str.encode("utf-8")).hexdigest()
+        event_hash = hashlib.sha256(f"{event_id}:{payload_str}".encode("utf-8")).hexdigest()
+
+        with self.transaction(conn) as tx:
+            with tx.cursor(cursor_factory=RealDictCursor) as cur:
+                # Check for existing record
+                cur.execute(
+                    """
+                    SELECT event_hash, status, first_processed_at 
+                    FROM processed_events 
+                    WHERE event_id = %s AND payment_id = %s;
+                    """,
+                    (event_id, payment_id)
+                )
+                row = cur.fetchone()
+                if not row:
+                    cur.execute(
+                        """
+                        INSERT INTO processed_events (
+                            event_hash, event_id, payment_id, payload_hash, first_processed_at, status
+                        ) VALUES (%s, %s, %s, %s, NOW(), 'PENDING')
+                        ON CONFLICT (event_id, payment_id) DO NOTHING
+                        RETURNING event_hash;
+                        """,
+                        (event_hash, event_id, payment_id, payload_hash)
+                    )
+                    inserted = cur.fetchone()
+                    if inserted:
+                        return EventReservationStatus.NEW_RESERVED
+
+                    cur.execute(
+                        "SELECT status, first_processed_at FROM processed_events WHERE event_id = %s AND payment_id = %s;",
+                        (event_id, payment_id)
+                    )
+                    row = cur.fetchone()
+
+                curr_status = row.get("status", "PROCESSED") if row else "PROCESSED"
+                if curr_status == "PROCESSED":
+                    return EventReservationStatus.ALREADY_PROCESSED
+                elif curr_status == "FAILED":
+                    cur.execute(
+                        """
+                        UPDATE processed_events 
+                        SET status = 'PENDING', payload_hash = %s, updated_at = NOW() 
+                        WHERE event_id = %s AND payment_id = %s;
+                        """,
+                        (payload_hash, event_id, payment_id)
+                    )
+                    return EventReservationStatus.RETRY_RESERVED
+                else:  # PENDING
+                    return EventReservationStatus.IN_FLIGHT
+
+    def complete_event(self, event_id: str, payment_id: str, conn=None) -> None:
+        """
+        Two-Phase Idempotency Phase 2 (Success):
+        Marks reserved event as permanently PROCESSED in the same transaction as state/ledger persistence.
+        """
+        with self.transaction(conn) as tx:
+            with tx.cursor() as cur:
+                cur.execute(
+                    """
+                    UPDATE processed_events 
+                    SET status = 'PROCESSED', updated_at = NOW() 
+                    WHERE event_id = %s AND payment_id = %s;
+                    """,
+                    (event_id, payment_id)
+                )
+
+    def release_event_reservation(self, event_id: str, payment_id: str, error_msg: str = "", conn=None) -> None:
+        """
+        Two-Phase Idempotency Phase 2 (Failure):
+        Marks event reservation as FAILED so that subsequent retries are permitted.
+        """
+        with self.transaction(conn) as tx:
+            with tx.cursor() as cur:
+                cur.execute(
+                    """
+                    UPDATE processed_events 
+                    SET status = 'FAILED', error_message = %s, updated_at = NOW() 
+                    WHERE event_id = %s AND payment_id = %s;
+                    """,
+                    (error_msg[:500] if error_msg else "Processing failed", event_id, payment_id)
+                )
 
     def check_and_register_event(
         self,
@@ -367,7 +480,7 @@ class PersistenceManager:
         conn=None
     ) -> bool:
         """
-        Durable Idempotency Guard:
+        Legacy/Durable Idempotency Guard:
         Stores canonical payload hash and event hash.
         Returns True if this is the first delivery (inserted).
         Returns False if replayed/duplicate event (rejected).
@@ -381,9 +494,9 @@ class PersistenceManager:
                 cur.execute(
                     """
                     INSERT INTO processed_events (
-                        event_hash, event_id, payment_id, payload_hash, first_processed_at
-                    ) VALUES (%s, %s, %s, %s, NOW())
-                    ON CONFLICT DO NOTHING
+                        event_hash, event_id, payment_id, payload_hash, first_processed_at, status
+                    ) VALUES (%s, %s, %s, %s, NOW(), 'PROCESSED')
+                    ON CONFLICT (event_id, payment_id) DO NOTHING
                     RETURNING event_hash;
                     """,
                     (event_hash, event_id, payment_id, payload_hash)

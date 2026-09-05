@@ -1,6 +1,6 @@
 from __future__ import annotations
 from enum import Enum
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any, List, Literal
 from datetime import datetime, time
 from pydantic import BaseModel, Field, field_validator, model_validator
 
@@ -45,6 +45,7 @@ class ActionType(str, Enum):
     PAUSE_RECON_VERIFY = "PAUSE_RECON_VERIFY"    # a5
     ESCALATE_HUMAN_OPS = "ESCALATE_HUMAN_OPS"    # a6
     ABSTAIN_DO_NOTHING = "ABSTAIN_DO_NOTHING"    # a7
+    COMMIT_RECOVERED = "COMMIT_RECOVERED"        # Authoritative bank settlement recovery
 
 
 class RootCauseCategory(str, Enum):
@@ -123,11 +124,24 @@ class MerchantPolicy(BaseModel):
     circuit_breaker_bank_failure_rate_threshold: float = Field(default=0.65, ge=0.0, le=1.0, description="Merchant Circuit Breaker Policy")
     
     # Category C: Benchmark & Economic Cost Assumptions
-    cost_per_sms: float = Field(default=0.15, description="Benchmark Assumption: SMS dispatch cost")
-    cost_per_whatsapp: float = Field(default=0.50, description="Benchmark Assumption: WhatsApp interactive message cost")
-    cost_per_llm_inference: float = Field(default=0.10, description="Benchmark Assumption: Gemini Flash inference cost")
-    cost_per_failed_bank_retry: float = Field(default=5.00, description="Benchmark Assumption: Bank bounce penalty")
-    chargeback_dispute_fee: float = Field(default=50.00, description="Benchmark Assumption: Customer chargeback filing fee")
+    cost_per_sms: float = Field(default=0.15, ge=0.0, description="Benchmark Assumption: SMS dispatch cost")
+    cost_per_whatsapp: float = Field(default=0.50, ge=0.0, description="Benchmark Assumption: WhatsApp interactive message cost")
+    cost_per_llm_inference: float = Field(default=0.10, ge=0.0, description="Benchmark Assumption: Gemini Flash inference cost")
+    cost_per_failed_bank_retry: float = Field(default=5.00, ge=0.0, description="Benchmark Assumption: Bank bounce penalty")
+    chargeback_dispute_fee: float = Field(default=50.00, ge=0.0, description="Benchmark Assumption: Customer chargeback filing fee")
+
+
+class BankSettlementWebhookPayload(BaseModel):
+    """
+    Authoritative bank settlement payload delivered via signed bank webhook.
+    """
+    event_id: str = Field(..., min_length=1, max_length=64, description="Unique bank event / notification ID")
+    payment_id: str = Field(..., min_length=1, max_length=64, description="Target payment ID")
+    settled_amount: float = Field(..., gt=0.0, le=10_000_000.0, description="Exact settled amount in INR")
+    currency: Literal["INR"] = Field(default="INR", description="Supported currency")
+    rrn: str = Field(..., min_length=6, max_length=32, description="Retrieval Reference Number / Bank Transaction ID")
+    bank_status: Literal["SETTLED"] = Field(default="SETTLED", description="Authoritative bank settlement status")
+    settlement_timestamp: datetime = Field(default_factory=datetime.utcnow, description="Bank settlement timestamp")
 
 
 # =============================================================================

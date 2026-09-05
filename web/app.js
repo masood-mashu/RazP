@@ -210,44 +210,47 @@ document.addEventListener('DOMContentLoaded', () => {
         // Update Provenance Badge
             provTag.innerText = `${prov.model || 'gemini-3.7-flash'} | ${prov.prompt_version || 'v1.0.0'} (${prov.latency_ms || 0} ms)`;
 
-        // Render AI Box
+        // HTML Escape Sanitizer to prevent XSS
+        const esc = (s) => (s == null ? '' : String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;'));
+
+        // Render AI Box (Sanitized)
         aiOutputBox.innerHTML = `
-            <div><strong>Root Cause:</strong> <span class="highlight">${ai.root_cause}</span></div>
-            <div><strong>Customer Intent:</strong> ${ai.customer_intent}</div>
+            <div><strong>Root Cause:</strong> <span class="highlight">${esc(ai.root_cause)}</span></div>
+            <div><strong>Customer Intent:</strong> ${esc(ai.customer_intent)}</div>
             <div><strong>Debit Claim:</strong> ${ai.claim_debit_occurred ? '<span class="danger bold">TRUE (Potential Deemed Success)</span>' : 'false'}</div>
-            <div><strong>Extracted PTP:</strong> ${ai.extracted_ptp_timestamp || 'None'}</div>
-            <div><strong>AI Proposed Action:</strong> <span class="bold">${ai.proposed_action}</span> (Confidence: ${(ai.confidence * 100).toFixed(1)}%)</div>
-            <div style="margin-top:4px;color:#94A3B8;"><em>Rationale:</em> ${ai.reasoning_audit_text}</div>
+            <div><strong>Extracted PTP:</strong> ${esc(ai.extracted_ptp_timestamp || 'None')}</div>
+            <div><strong>AI Proposed Action:</strong> <span class="bold">${esc(ai.proposed_action)}</span> (Confidence: ${(Number(ai.confidence || 0) * 100).toFixed(1)}%)</div>
+            <div style="margin-top:4px;color:#94A3B8;"><em>Rationale:</em> ${esc(ai.reasoning_audit_text)}</div>
         `;
 
         // Update Hero Flow
-        flowAiAction.innerText = ai.proposed_action;
+        flowAiAction.innerText = ai.proposed_action || '';
         flowGateAction.innerText = gate.is_overridden ? "OVERRIDE" : "APPROVED";
         flowGateAction.className = `flow-val ${gate.is_overridden ? 'danger' : 'success'}`;
-        flowExecAction.innerText = gate.final_action;
+        flowExecAction.innerText = gate.final_action || '';
 
         // Update Gate Tag
         gateVerdictTag.innerText = gate.is_overridden ? "🚨 OVERRIDDEN BY POLICY GATE" : "✓ APPROVED WITHOUT OVERRIDE";
         gateVerdictTag.className = `gate-verdict-tag ${gate.is_overridden ? 'overridden' : 'approved'}`;
 
-        // Render Gate Box
+        // Render Gate Box (Sanitized)
         let gateViolationsHtml = '';
         if (gate.violations_detected && gate.violations_detected.length > 0) {
-            gateViolationsHtml = gate.violations_detected.map(v => `<div class="violation-tag">🚨 INTERCEPTED: ${v}</div>`).join('');
+            gateViolationsHtml = gate.violations_detected.map(v => `<div class="violation-tag">🚨 INTERCEPTED: ${esc(v)}</div>`).join('');
         }
 
         gateOutputBox.innerHTML = `
-            <div><strong>Policy Gate Action:</strong> <span class="${gate.is_overridden ? 'danger bold' : 'success bold'}">${gate.final_action}</span></div>
-            <div><strong>Policy Rationale:</strong> ${gate.policy_reason}</div>
+            <div><strong>Policy Gate Action:</strong> <span class="${gate.is_overridden ? 'danger bold' : 'success bold'}">${esc(gate.final_action)}</span></div>
+            <div><strong>Policy Rationale:</strong> ${esc(gate.policy_reason)}</div>
             ${gateViolationsHtml}
         `;
 
-        // Render State & Ledger Box
+        // Render State & Ledger Box (Sanitized)
         stateOutputBox.innerHTML = `
-            <div><strong>Resulting State:</strong> <span class="success bold">${exec.resulting_state}</span></div>
-            <div><strong>Operational Cost:</strong> ₹${exec.financial_cost_incurred}</div>
+            <div><strong>Resulting State:</strong> <span class="success bold">${esc(exec.resulting_state)}</span></div>
+            <div><strong>Operational Cost:</strong> ₹${esc(exec.financial_cost_incurred)}</div>
             <div style="margin-top:4px;"><strong>SHA-256 Block Hash:</strong></div>
-            <div class="hash-val" style="font-size:0.7rem;word-break:break-all;">${block ? block.current_hash : 'N/A'}</div>
+            <div class="hash-val" style="font-size:0.7rem;word-break:break-all;">${esc(block ? block.current_hash : 'N/A')}</div>
         `;
     }
 

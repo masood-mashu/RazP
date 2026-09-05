@@ -1,6 +1,7 @@
 """
 Vercel Serverless Function entry point for RazP API.
 Exports the FastAPI instance directly for Vercel's ASGI Python runtime.
+Fails closed in production if database durability requirements are not satisfied.
 """
 import sys
 import os
@@ -18,7 +19,17 @@ db_url = os.getenv("DATABASE_URL") or os.getenv("POSTGRES_URL") or os.getenv("PO
 if db_url and "DATABASE_URL" not in os.environ:
     os.environ["DATABASE_URL"] = db_url
 
-# Default to in-memory fallback on Vercel if no database URL is configured
+is_prod = os.getenv("ENVIRONMENT", "").lower() in ("production", "prod") or os.getenv("VERCEL_ENV") == "production"
+
+# Fail closed in production: Never silently switch to ephemeral in-memory mode
+if is_prod and not db_url:
+    raise RuntimeError(
+        "FATAL: Running in production environment (VERCEL_ENV=production or ENVIRONMENT=production) "
+        "but DATABASE_URL is not configured. RazP requires PostgreSQL durability in production. "
+        "Automatic in-memory fallback is prohibited."
+    )
+
+# Explicit opt-in for demo in-memory fallback only in non-production
 if not db_url and "RAZP_DEMO_IN_MEMORY" not in os.environ:
     os.environ["RAZP_DEMO_IN_MEMORY"] = "true"
 

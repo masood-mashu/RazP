@@ -29,11 +29,30 @@ const TOKEN_KEY = 'razp_auth_token';
 export const DEFAULT_DEMO_ADMIN_KEY = 'razp_master_admin_demo';
 
 export function getAuthToken(): string {
-  return localStorage.getItem(TOKEN_KEY) || DEFAULT_DEMO_ADMIN_KEY;
+  const stored = localStorage.getItem(TOKEN_KEY);
+  if (stored) return stored.trim();
+  // Allow demo fallback only when explicitly enabled or in local development
+  const allowDemo = (import.meta as any).env?.VITE_ALLOW_DEMO_KEYS === 'true' || (import.meta as any).env?.DEV;
+  if (allowDemo) {
+    return DEFAULT_DEMO_ADMIN_KEY;
+  }
+  return '';
 }
 
 export function setAuthToken(token: string) {
-  localStorage.setItem(TOKEN_KEY, token);
+  if (!token || !token.trim()) {
+    localStorage.removeItem(TOKEN_KEY);
+  } else {
+    localStorage.setItem(TOKEN_KEY, token.trim());
+  }
+}
+
+export function clearAuthToken() {
+  localStorage.removeItem(TOKEN_KEY);
+}
+
+export function isAuthenticated(): boolean {
+  return Boolean(getAuthToken());
 }
 
 async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
