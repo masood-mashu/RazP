@@ -20,13 +20,14 @@ We have conducted a complete software engineering overhaul of **RazP Sentinel** 
 
 ## 2. Visual Audit & Full Project Video Showcase
 
-### 2.0 Complete 5-Minute Project Video Showcase (MP4 & WebM with Voiceover & Subtitles)
-The project demonstration video is rendered in universal **MP4** and **WebM** formats (4 minutes 45 seconds) with natural expressive narration and synchronized English subtitles:
+### 2.0 Complete 5-Minute Project Video Showcase (MP4 & WebM with Fresh Voiceover & Subtitles)
+The project demonstration video is rendered in universal **MP4** and **WebM** formats (5 minutes 03 seconds) with fresh executive-grade narration (`en-US-BrianMultilingualNeural`) and synchronized English subtitles:
 
-- 🎬 **Universal MP4 Video (Video + Audio + Subtitles):** [**`razp_sentinel_5min_showcase.mp4`**](file:///d:/hackathon/RazorPay/razp_sentinel_5min_showcase.mp4) (16.2 MB)
-- 🌐 **WebM Video (HTML5 Web Playback):** [**`razp_sentinel_5min_showcase.webm`**](file:///d:/hackathon/RazorPay/razp_sentinel_5min_showcase.webm) (9.2 MB)
-- 🎙️ **Standalone Voiceover Audio:** [**`narration_voiceover.mp3`**](file:///d:/hackathon/RazorPay/narration_voiceover.mp3) (1.8 MB)
+- 🎬 **Universal Submission MP4 Video (1080p Video + Fresh Audio + Soft Subtitles):** [**`razp_sentinel_5min_showcase.mp4`**](file:///d:/hackathon/RazorPay/razp_sentinel_5min_showcase.mp4) (18.4 MB)
+- 🌐 **WebM Showcase Video (Direct Browser Playback):** [**`razp_sentinel_5min_showcase.webm`**](file:///d:/hackathon/RazorPay/razp_sentinel_5min_showcase.webm) (27.3 MB)
+- 🎙️ **Fresh Voiceover Audio Track:** [**`narration_voiceover_fresh.mp3`**](file:///d:/hackathon/RazorPay/narration_voiceover_fresh.mp3) (5.8 MB)
 - 📝 **Synchronized Subtitles (SRT):** [**`subtitles.srt`**](file:///d:/hackathon/RazorPay/subtitles.srt)
+- 📄 **Official Spoken Script & Timestamp Guide:** [**`DEMO_VIDEO_SCRIPT.md`**](file:///d:/hackathon/RazorPay/DEMO_VIDEO_SCRIPT.md)
 
 ---
 
