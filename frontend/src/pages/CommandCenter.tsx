@@ -380,6 +380,7 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ onSelectCase, onNa
               <button
                 onClick={() => setDemoModalOpen(false)}
                 className="p-1 rounded-md text-muted-foreground hover:text-white hover:bg-secondary"
+                data-testid="button-close-demo-modal"
               >
                 <X size={18} />
               </button>

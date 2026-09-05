@@ -762,6 +762,9 @@ async def run_multi_event_scenario(
 
     if persistence_mgr:
         with persistence_mgr.transaction() as conn:
+            with conn.cursor() as cur:
+                cur.execute("DELETE FROM processed_events WHERE payment_id = %s;", (payment_id,))
+                cur.execute("DELETE FROM payment_cases WHERE payment_id = %s;", (payment_id,))
             persistence_mgr.check_and_register_event("evt_fail_001", payment_id, "3200.0:GATEWAY_TIMEOUT:U30", conn=conn)
             persistence_mgr.get_or_create_case(payment_id, "inv_demo_multi_001", 3200.0, PaymentState.PAYMENT_FAILED, conn=conn)
             persistence_mgr.record_transition(payment_id, PaymentState.PAYMENT_FAILED, PaymentState.TELEMETRY_ANALYSIS, "Failure telemetry ingested", conn=conn)
